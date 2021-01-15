@@ -1,0 +1,2 @@
+D:\Wacky War\Wacky War - SnowBall battle\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+D:\Wacky War\Wacky War - SnowBall battle\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
