@@ -6,6 +6,7 @@ using UnityEngine;
 public class Snowball_Shoot : MonoBehaviour
 {
     private Animator anim;
+    public AudioSource shootSound;
 
     //bullet
     public GameObject bullet;
@@ -76,6 +77,7 @@ public class Snowball_Shoot : MonoBehaviour
     private void Shoot()
     {
         anim.SetTrigger("throw");
+        shootSound.Play();
         readyToShoot = false;
         //Find the exact hit position using a raycast
         Ray ray = fpscam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));

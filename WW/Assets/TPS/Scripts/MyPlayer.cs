@@ -1,16 +1,24 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MyPlayer : MonoBehaviour
 {
     public float MoveSpeed = 30f;
+    public float gravity = -50;
     public float smoothRotationTime = 0.25f;
     public bool enableMobileInputs = false;
     public GameObject crossHairPrefab;
     float currentVelocity;
+    float velocityY;
     float currentSpeed;
     float speedVelocity;
     public float JumpForce;
 
+    //sounds
+    public List<AudioSource> footsteps;
+    int num = 0;
+
+    private CharacterController characterController;
     public Transform cameraTransform;
     private GameObject SnowBall;
     private Animator anim;
@@ -20,9 +28,11 @@ public class MyPlayer : MonoBehaviour
     private bool throwsnow;
     void Start()
     {
+        characterController = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
         //GameObject.Find("ThrowBtn").GetComponent<ThrowBtnScript>().SetPlayer(this);
         crossHairPrefab = Instantiate(crossHairPrefab);
+
     }
     void Update()
     {
@@ -45,14 +55,32 @@ public class MyPlayer : MonoBehaviour
         Vector2 inputDir = input.normalized;//To keep the values normalized between -1 and 1.
         //only if he is moving change the angle direction
         //Vector2.zero returns x = 0 y = 0
+
         if (inputDir != Vector2.zero)
         {
-            //enularAngles is used to transform the angle of the player.
+            //eulerAngles is used to transform the angle of the player.
             //Math.Atan2 returns the angle in radians, so we multiply it by Mathf.Rad2Deg and it will be converted to degrees. (if x is 1 and y is 1, it will rotate 45 degree)
             //Mathf.SmootDampAngle is used for smoothness rotation.
             //+cameraTransform.euelerAngles.y means to rotate the player as the camera's y rotation.
             float rotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg+Camera.main.transform.eulerAngles.y;
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y,rotation,ref currentVelocity,smoothRotationTime);
+            if (!footsteps[0].isPlaying)
+            {
+                footsteps[0].Play();
+                    num = 1;
+            }
+            if (!footsteps[1].isPlaying)
+            {
+                footsteps[1].Play();
+                num = 0;
+            }
+        }
+        else
+        {
+            foreach (var i in footsteps) 
+            {
+                i.Stop();
+            }
         }
         //Translate is used for the movement of the player.
         //.forward means to move the player forward depends on his character angle face direction.
@@ -65,16 +93,16 @@ public class MyPlayer : MonoBehaviour
         //To go from the currentspeed to the targetspeed by 0.1f amount of time.
         currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedVelocity, 0.1f);
 
-        if (inputDir.magnitude > 0)
+        //transform.Translate(transform.forward * currentSpeed * Time.deltaTime, Space.World);
+        velocityY += Time.deltaTime * gravity;
+        Vector3 velocity = transform.forward * currentSpeed + Vector3.up*velocityY;
+        characterController.Move(velocity * Time.deltaTime);
+        currentSpeed = new Vector2(characterController.velocity.x, characterController.velocity.z).magnitude;
+        if (characterController.isGrounded)
         {
-            anim.SetBool("running", true);
+            velocityY = 0;
         }
-        else if (inputDir.magnitude == 0)
-        {
-            anim.SetBool("running", false);
-        }
-
-        transform.Translate(transform.forward * currentSpeed * Time.deltaTime, Space.World);
+        anim.SetFloat("Speed", currentSpeed/30);
     }
     private void LateUpdate()
     {
@@ -86,10 +114,11 @@ public class MyPlayer : MonoBehaviour
     }
     public void Jump()
     {
-        Rigidbody rb = GetComponent<Rigidbody>();
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
-        anim.SetTrigger("jump");
+        if (characterController.isGrounded)
+        {
+            anim.SetTrigger("jump");
+            float jumpVelocity = Mathf.Sqrt(-2 * gravity * JumpForce);
+            velocityY = jumpVelocity;
+        }
     }
 }
