@@ -277,12 +277,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1031911489}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 64.3, y: 135.4, z: 19.9}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 64.29997, y: 135.3999, z: 19.899988}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6056271654939049231}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1275305684
 GameObject:
@@ -315,7 +315,7 @@ Transform:
   - {fileID: 1771158563}
   - {fileID: 228617320}
   m_Father: {fileID: 6056271654939049231}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1771158562
 GameObject:
@@ -475,7 +475,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6056271654939049231}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &1899288733
 Camera:
@@ -2861,9 +2861,9 @@ Transform:
   - {fileID: 4259223956686065263}
   - {fileID: 6018651362395579051}
   - {fileID: 6018651363613794928}
-  - {fileID: 1031911490}
   - {fileID: 1899288731}
   - {fileID: 1275305685}
+  - {fileID: 1031911490}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 96.15, z: 0}
@@ -2924,7 +2924,6 @@ MonoBehaviour:
   footsteps:
   - {fileID: 478415580}
   - {fileID: 1771158564}
-  cameraTransform: {fileID: 1899288731}
   joystick: {fileID: 0}
   secondaryCam: {fileID: 1899288733}
 --- !u!114 &6018651362558606017

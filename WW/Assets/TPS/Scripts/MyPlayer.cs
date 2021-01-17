@@ -19,7 +19,6 @@ public class MyPlayer : MonoBehaviour
     int num = 0;
 
     private CharacterController characterController;
-    public Transform cameraTransform;
     private GameObject SnowBall;
     private Animator anim;
     public FixedJoystick joystick;
@@ -30,7 +29,6 @@ public class MyPlayer : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
-        //GameObject.Find("ThrowBtn").GetComponent<ThrowBtnScript>().SetPlayer(this);
         crossHairPrefab = Instantiate(crossHairPrefab);
 
     }
@@ -97,14 +95,15 @@ public class MyPlayer : MonoBehaviour
         velocityY += Time.deltaTime * gravity;
         Vector3 velocity = transform.forward * currentSpeed + Vector3.up*velocityY;
         characterController.Move(velocity * Time.deltaTime);
-        currentSpeed = new Vector2(characterController.velocity.x, characterController.velocity.z).magnitude;
+        //currentSpeed = new Vector2(characterController.velocity.x, characterController.velocity.z).magnitude;
+        currentSpeed = new Vector2(joystick.Horizontal, joystick.Vertical).magnitude;
         if (characterController.isGrounded)
         {
             velocityY = 0;
         }
-        anim.SetFloat("Speed", currentSpeed/30);
+            anim.SetFloat("Speed", currentSpeed);
     }
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         PositionCrossHair();
     }

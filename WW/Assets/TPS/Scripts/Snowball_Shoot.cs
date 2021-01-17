@@ -47,7 +47,6 @@ public class Snowball_Shoot : MonoBehaviour
     private void Update()
     {
         MyInput();
-
         //Set ammo display, if it exists
         if (ammunationDisplay != null)
         {
@@ -83,13 +82,14 @@ public class Snowball_Shoot : MonoBehaviour
         Ray ray = fpscam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
         transform.rotation = new Quaternion(0, Camera.main.transform.rotation.y, 0, Camera.main.transform.rotation.w);
+        //attackPoint.transform.eulerAngles = new Vector3(ray.direction.x, fpscam.transform.eulerAngles.y, ray.direction.z);
 
         //check if ray hits something
         Vector3 targetPoint;
         if (Physics.Raycast(ray, out hit))
             targetPoint = hit.point;
         else
-            targetPoint = ray.GetPoint(75); //Just a point far away from the player
+            targetPoint = ray.GetPoint(70); //Just a point far away from the player
 
         //Calculate direction from attackPoint to targetPoint
         Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
