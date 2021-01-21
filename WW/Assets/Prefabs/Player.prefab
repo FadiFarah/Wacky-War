@@ -278,7 +278,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1031911489}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 64.29997, y: 135.3999, z: 19.899988}
+  m_LocalPosition: {x: 64.7, y: 128.6, z: 23.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6056271654939049231}
@@ -471,7 +471,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1899288730}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 155.1, z: 49.8}
+  m_LocalPosition: {x: -5.4, y: 119.3, z: 70.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6056271654939049231}
@@ -2500,7 +2500,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6018651362395581780}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 246, z: 0}
+  m_LocalPosition: {x: 0, y: 188.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6056271654939049231}
@@ -2880,7 +2880,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: cf4f05f6765d96c4193f8940c7680561, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -2914,17 +2914,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee9a643d2f8dbc042a529db59a5dc56f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 30
+  MoveSpeed: 10
   gravity: -50
   smoothRotationTime: 0.25
   enableMobileInputs: 1
   crossHairPrefab: {fileID: 2878488642524795748, guid: 8fb9806bd1b72fe4e842d6216d6a0438,
     type: 3}
   JumpForce: 7
+  isgrounded: 0
   footsteps:
   - {fileID: 478415580}
   - {fileID: 1771158564}
-  joystick: {fileID: 0}
   secondaryCam: {fileID: 1899288733}
 --- !u!114 &6018651362558606017
 MonoBehaviour:
@@ -2942,11 +2942,13 @@ MonoBehaviour:
   leftGunBone: {fileID: 6018651362378124416}
   arsenal:
   - name: SmallSnowBall
-    rightGun: {fileID: 0}
+    rightGun: {fileID: 1194318368247115194, guid: d1ee8a54bb172d84a8cbea4fffab3c3f,
+      type: 3}
     leftGun: {fileID: 0}
     controller: {fileID: 0}
   - name: BigSnowBall
-    rightGun: {fileID: 0}
+    rightGun: {fileID: 1375583775391718553, guid: 0fb4cbbe9cfc8564d9d9cf99233c6b8b,
+      type: 3}
     leftGun: {fileID: 0}
     controller: {fileID: 0}
 --- !u!114 &409632489
@@ -2963,8 +2965,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootSound: {fileID: 228617321}
   bullet: {fileID: 6096811058807987435, guid: 7d84f641a04e17b4fb51137b6ae1f757, type: 3}
+  bulletInHand: {fileID: 6018651362378124417}
   shootForce: 120
-  upwardForce: 0
+  upwardForce: 10
   timeBetweenShooting: 1
   spread: 0
   reloadTime: 1
@@ -2994,7 +2997,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 61.61, z: 0}
+  m_Center: {x: 0, y: 70.38, z: 0}
 --- !u!1 &7019998848875186624
 GameObject:
   m_ObjectHideFlags: 0

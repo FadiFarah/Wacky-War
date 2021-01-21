@@ -13,6 +13,7 @@ public class MyPlayer : MonoBehaviour
     float currentSpeed;
     float speedVelocity;
     public float JumpForce;
+    public bool isgrounded;
 
     //sounds
     public List<AudioSource> footsteps;
@@ -21,19 +22,22 @@ public class MyPlayer : MonoBehaviour
     private CharacterController characterController;
     private GameObject SnowBall;
     private Animator anim;
-    public FixedJoystick joystick;
+    private FixedJoystick joystick;
     public Camera secondaryCam;
 
     private bool throwsnow;
-    void Start()
+    void Awake()
     {
+        joystick = GameObject.Find("Joystick").GetComponent<FixedJoystick>();
         characterController = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
         crossHairPrefab = Instantiate(crossHairPrefab);
+        isgrounded = characterController.isGrounded;
 
     }
     void Update()
     {
+        anim.SetBool("Grounded", characterController.isGrounded);
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Jump();
@@ -101,7 +105,18 @@ public class MyPlayer : MonoBehaviour
         {
             velocityY = 0;
         }
+        if (currentSpeed <= 0.8f)
+        {
+            footsteps[0].pitch = 0.40f;
+            footsteps[1].pitch = 0.40f;
             anim.SetFloat("Speed", currentSpeed);
+        }
+        else if (currentSpeed > 0.8f)
+        {
+            footsteps[0].pitch = 1f;
+            footsteps[1].pitch = 1f;
+            anim.SetFloat("Speed", currentSpeed);
+        }
     }
     private void FixedUpdate()
     {

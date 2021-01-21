@@ -10,6 +10,7 @@ public class Snowball_Shoot : MonoBehaviour
 
     //bullet
     public GameObject bullet;
+    public GameObject bulletInHand;
 
     //bullet force
     public float shootForce, upwardForce;
@@ -38,6 +39,7 @@ public class Snowball_Shoot : MonoBehaviour
     {
         //make sure magazine is full
         bulletsLeft = magazineSize;
+        ammunationDisplay = GameObject.Find("AmmunationDisplay").GetComponent<TextMeshProUGUI>();
         readyToShoot = true;
     }
     void Start()
@@ -76,6 +78,7 @@ public class Snowball_Shoot : MonoBehaviour
     private void Shoot()
     {
         anim.SetTrigger("throw");
+        bulletInHand.SetActive(false);
         shootSound.Play();
         readyToShoot = false;
         //Find the exact hit position using a raycast
@@ -99,7 +102,7 @@ public class Snowball_Shoot : MonoBehaviour
         float y = Random.Range(-spread, spread);
 
         //Calculate new direction with spread;
-        Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last
+        Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0); //Just adds spread to last
 
         //Instantiate bullet/projectile
         GameObject currentBullet = Instantiate(bullet, attackPoint.position, Quaternion.identity);
@@ -135,6 +138,7 @@ public class Snowball_Shoot : MonoBehaviour
         //Allow shooting and invoking again
         readyToShoot = true;
         allowInvoke = true;
+        bulletInHand.SetActive(true);
     }
     private void Reload()
     {

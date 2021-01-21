@@ -17,6 +17,12 @@ public class MyCamera : MonoBehaviour
     public FixedTouchField touchField;
     public float offset;
 
+    private void Awake()
+    {
+        transform.parent = null;
+        touchField = GameObject.Find("TouchScreenField").GetComponent<FixedTouchField>();
+        target = GameObject.FindGameObjectWithTag("Player").transform.GetChild(2);
+    }
     private void Start()
     {
         if (enableMobileInputs)
@@ -52,7 +58,7 @@ public class MyCamera : MonoBehaviour
         //Keep the camera's position away from the target player by 2 units.
         //transform.position = target.position - transform.forward * 30f;
         Vector3 _offset = target.position- transform.forward * offset;
-        _offset.y = 15f+GameObject.Find("Player").transform.position.y;
+        _offset.y = 15f+GameObject.FindGameObjectWithTag("Player").transform.position.y;
         transform.position = _offset;
     }
 
