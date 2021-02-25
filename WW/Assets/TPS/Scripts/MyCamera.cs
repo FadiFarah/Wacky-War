@@ -1,7 +1,9 @@
+using Photon.Pun;
 using UnityEngine;
 
 public class MyCamera : MonoBehaviour
 {
+    public PhotonView playerPhotonView;
     public float Yaxis;
     public float Xaxis;
     public bool enableMobileInputs=false;
@@ -19,9 +21,16 @@ public class MyCamera : MonoBehaviour
 
     private void Awake()
     {
-        transform.parent = null;
-        touchField = GameObject.Find("TouchScreenField").GetComponent<FixedTouchField>();
-        target = GameObject.FindGameObjectWithTag("Player").transform.GetChild(2);
+        if (playerPhotonView.IsMine)
+        {
+            transform.parent = null;
+            touchField = GameObject.Find("TouchScreenField").GetComponent<FixedTouchField>();
+            target = GetLocalPlayer().transform.GetChild(2);
+        }
+        else
+        {
+            this.gameObject.SetActive(false);
+        }
     }
     private void Start()
     {
@@ -60,6 +69,19 @@ public class MyCamera : MonoBehaviour
         Vector3 _offset = target.position- transform.forward * offset;
         _offset.y = 15f+GameObject.FindGameObjectWithTag("Player").transform.position.y;
         transform.position = _offset;
+    }
+
+    GameObject GetLocalPlayer()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach(GameObject player in players)
+        {
+            if (player.GetComponent<PhotonView>().IsMine)
+            {
+                return player;
+            }
+        }
+        return null;
     }
 
 }

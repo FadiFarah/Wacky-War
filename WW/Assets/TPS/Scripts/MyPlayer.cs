@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class MyPlayer : MonoBehaviour
+public class MyPlayer : MonoBehaviourPun
 {
     public float MoveSpeed = 30f;
     public float gravity = -50;
@@ -26,16 +27,37 @@ public class MyPlayer : MonoBehaviour
     public Camera secondaryCam;
 
     private bool throwsnow;
+    private double timeToReachGoal;
+
+
     void Awake()
     {
-        joystick = GameObject.Find("Joystick").GetComponent<FixedJoystick>();
-        characterController = GetComponent<CharacterController>();
-        anim = GetComponent<Animator>();
-        crossHairPrefab = Instantiate(crossHairPrefab);
-        isgrounded = characterController.isGrounded;
-
+        if(photonView.IsMine)
+        { 
+            joystick = GameObject.Find("Joystick").GetComponent<FixedJoystick>();
+            characterController = GetComponent<CharacterController>();
+        }
+    }
+    void Start()
+    {
+        if (photonView.IsMine)
+        {
+            anim = GetComponent<Animator>();
+            GameObject.Find("JumpButton").GetComponent<FixedJumpButton>().SetPlayer(this);
+            crossHairPrefab = Instantiate(crossHairPrefab);
+            isgrounded = characterController.isGrounded;
+        }
     }
     void Update()
+    {
+      
+        if (photonView.IsMine)
+        {
+            LocalPlayerUpdate();
+        }
+
+    }
+    void LocalPlayerUpdate()
     {
         anim.SetBool("Grounded", characterController.isGrounded);
         if (Input.GetKeyDown(KeyCode.Space))
@@ -44,7 +66,7 @@ public class MyPlayer : MonoBehaviour
         }
         Vector2 input = Vector2.zero;
         if (enableMobileInputs)
-        {       
+        {
             //if Horizontal is 1 it will move right -1 left(0,0,1) if vertical 1 forward -1 backwards (1,0,0)
             input = new Vector2(joystick.input.x, joystick.input.y);
         }
@@ -53,23 +75,23 @@ public class MyPlayer : MonoBehaviour
             //if Horizontal is 1 it will move right -1 left(0,0,1) if vertical 1 forward -1 backwards (1,0,0)
             input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         }
-        
+
         Vector2 inputDir = input.normalized;//To keep the values normalized between -1 and 1.
+
         //only if he is moving change the angle direction
         //Vector2.zero returns x = 0 y = 0
-
         if (inputDir != Vector2.zero)
         {
             //eulerAngles is used to transform the angle of the player.
             //Math.Atan2 returns the angle in radians, so we multiply it by Mathf.Rad2Deg and it will be converted to degrees. (if x is 1 and y is 1, it will rotate 45 degree)
             //Mathf.SmootDampAngle is used for smoothness rotation.
             //+cameraTransform.euelerAngles.y means to rotate the player as the camera's y rotation.
-            float rotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg+Camera.main.transform.eulerAngles.y;
-            transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y,rotation,ref currentVelocity,smoothRotationTime);
+            float rotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+            transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, rotation, ref currentVelocity, smoothRotationTime);
             if (!footsteps[0].isPlaying)
             {
                 footsteps[0].Play();
-                    num = 1;
+                num = 1;
             }
             if (!footsteps[1].isPlaying)
             {
@@ -79,7 +101,7 @@ public class MyPlayer : MonoBehaviour
         }
         else
         {
-            foreach (var i in footsteps) 
+            foreach (var i in footsteps)
             {
                 i.Stop();
             }
@@ -97,7 +119,7 @@ public class MyPlayer : MonoBehaviour
 
         //transform.Translate(transform.forward * currentSpeed * Time.deltaTime, Space.World);
         velocityY += Time.deltaTime * gravity;
-        Vector3 velocity = transform.forward * currentSpeed + Vector3.up*velocityY;
+        Vector3 velocity = transform.forward * currentSpeed + Vector3.up * velocityY;
         characterController.Move(velocity * Time.deltaTime);
         //currentSpeed = new Vector2(characterController.velocity.x, characterController.velocity.z).magnitude;
         currentSpeed = new Vector2(joystick.Horizontal, joystick.Vertical).magnitude;
@@ -120,7 +142,10 @@ public class MyPlayer : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        PositionCrossHair();
+        if (photonView.IsMine)
+        {
+            PositionCrossHair();
+        }
     }
     void PositionCrossHair()
     {
@@ -135,4 +160,6 @@ public class MyPlayer : MonoBehaviour
             velocityY = jumpVelocity;
         }
     }
+
+    
 }
