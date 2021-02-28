@@ -7,15 +7,7 @@ public class NetworkPlayer : MonoBehaviourPun,IPunObservable
 {
 
 
-    protected MyPlayer Player;
-    protected Vector3 RemotePlayerPosition;
-    void Awake()
-    {
-        Player = GetComponent<MyPlayer>();
-
-        if (!photonView.IsMine && GetComponent<PlayerController>() != null)
-            Destroy(GetComponent<PlayerController>());
-    }
+   
 
     // Update is called once per frame
     //Values that will be synced over network

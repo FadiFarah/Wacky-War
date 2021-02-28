@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using Photon.Pun;
 
-public class Snowball_Collision : MonoBehaviour
+public class Snowball_Collision : MonoBehaviourPun
 {
     //Assignables
     public Rigidbody rb;
@@ -30,12 +31,16 @@ public class Snowball_Collision : MonoBehaviour
     }
     private void Update()
     {
-        //When to explode
-        if (collisions > maxCollisions) Explode();
-        //Count down lifetime
-        maxLifetime -= Time.deltaTime;
-        if (maxLifetime <= 0) Explode();
+        if (photonView.IsMine)
+        {
+            //When to explode
+            if (collisions > maxCollisions) Explode();
+            //Count down lifetime
+            maxLifetime -= Time.deltaTime;
+            if (maxLifetime <= 0) photonView.RPC("Explode", RpcTarget.All);
+        }
     }
+    [PunRPC]
     private void Explode()
     {
         //Instantiate explosion
@@ -63,7 +68,7 @@ public class Snowball_Collision : MonoBehaviour
         collisions++;
 
         //Explode if bullet gits an enemy directly and explodeOnTouch is activated
-        if (explodeOnTouch) Explode();
+        if (explodeOnTouch) photonView.RPC("Explode", RpcTarget.All);
 
     }
     private void Delay()

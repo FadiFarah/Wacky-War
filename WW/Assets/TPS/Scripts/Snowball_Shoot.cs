@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Photon.Pun;
 
-public class Snowball_Shoot : MonoBehaviour
+public class Snowball_Shoot : MonoBehaviourPun
 {
     private Animator anim;
     public AudioSource shootSound;
@@ -48,11 +49,14 @@ public class Snowball_Shoot : MonoBehaviour
     }
     private void Update()
     {
-        MyInput();
-        //Set ammo display, if it exists
-        if (ammunationDisplay != null)
+        if (photonView.IsMine)
         {
-            ammunationDisplay.SetText(bulletsLeft / bulletsPerTab + " / " + magazineSize / bulletsPerTab);
+            MyInput();
+            //Set ammo display, if it exists
+            if (ammunationDisplay != null)
+            {
+                ammunationDisplay.SetText(bulletsLeft / bulletsPerTab + " / " + magazineSize / bulletsPerTab);
+            }
         }
     }
     private void MyInput()
@@ -72,11 +76,13 @@ public class Snowball_Shoot : MonoBehaviour
             //Set bullets shot to 0
             bulletsShot = 0;
 
-            Shoot();
+            photonView.RPC("Shoot", RpcTarget.All);
         }
     }
+    [PunRPC]
     private void Shoot()
     {
+
         anim.SetTrigger("throw");
         bulletInHand.SetActive(false);
         shootSound.Play();
@@ -105,13 +111,16 @@ public class Snowball_Shoot : MonoBehaviour
         Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0); //Just adds spread to last
 
         //Instantiate bullet/projectile
-        GameObject currentBullet = Instantiate(bullet, attackPoint.position, Quaternion.identity);
-        //Rotate bullet to shoot direction
-        currentBullet.transform.forward = directionWithSpread.normalized;
-        //Add forces to bullet
-        currentBullet.GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
-        currentBullet.GetComponent<Rigidbody>().AddForce(fpscam.transform.up * upwardForce, ForceMode.Impulse);
+        if (photonView.IsMine)
+        {
+            GameObject currentBullet = PhotonNetwork.Instantiate(bullet.name, attackPoint.position, Quaternion.identity);
 
+            //Rotate bullet to shoot direction
+            currentBullet.transform.forward = directionWithSpread.normalized;
+            //Add forces to bullet
+            currentBullet.GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
+            currentBullet.GetComponent<Rigidbody>().AddForce(fpscam.transform.up * upwardForce, ForceMode.Impulse);
+        }
         //Instantiate muzzle flash, if you have one
         if (muzzleFlash != null)
         {
@@ -122,17 +131,21 @@ public class Snowball_Shoot : MonoBehaviour
         bulletsLeft--;
         bulletsShot++;
 
-        //Invoke resetShot function (if not already invoked)
-        if (allowInvoke)
+        if (photonView.IsMine)
         {
-            Invoke("ResetShot", timeBetweenShooting);
-            allowInvoke = false;
-        }
+            //Invoke resetShot function (if not already invoked)
+            if (allowInvoke)
+            {
+                Invoke("ResetShot", timeBetweenShooting);
+                allowInvoke = false;
+            }
 
-        //if more than one bulletsPerTab make sure to repeat shoot function
-        if (bulletsShot < bulletsPerTab && bulletsLeft > 0)
-            Invoke("Shoot", timebetweenShots);
+            //if more than one bulletsPerTab make sure to repeat shoot function
+            if (bulletsShot < bulletsPerTab && bulletsLeft > 0)
+                Invoke("Shoot", timebetweenShots);
+        }
     }
+    
     private void ResetShot()
     {
         //Allow shooting and invoking again

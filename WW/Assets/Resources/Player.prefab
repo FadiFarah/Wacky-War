@@ -454,7 +454,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1899288731}
   - component: {fileID: 1899288733}
-  - component: {fileID: 1899288732}
   - component: {fileID: 1899288734}
   m_Layer: 0
   m_Name: SecondaryCam
@@ -520,14 +519,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &1899288732
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1899288730}
-  m_Enabled: 1
 --- !u!114 &1899288734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2844,7 +2835,6 @@ GameObject:
   - component: {fileID: 1813901708}
   - component: {fileID: 1813901706}
   - component: {fileID: -3815673634341580415}
-  - component: {fileID: 1813901707}
   - component: {fileID: 1793686572}
   - component: {fileID: -7841662602285965507}
   m_Layer: 0
@@ -2926,7 +2916,7 @@ MonoBehaviour:
   gravity: -50
   smoothRotationTime: 0.25
   enableMobileInputs: 1
-  crossHairPrefab: {fileID: 2878488642524795748, guid: 8fb9806bd1b72fe4e842d6216d6a0438,
+  crossHairPrefab: {fileID: 1930020262471372403, guid: 59818c9ee29cb574ab159a236fdf8c8f,
     type: 3}
   JumpForce: 7
   isgrounded: 0
@@ -2980,7 +2970,7 @@ MonoBehaviour:
   spread: 0
   reloadTime: 1
   timebetweenShots: 0
-  magazineSize: 50
+  magazineSize: 10
   bulletsPerTab: 1
   allowButtonHold: 0
   fpscam: {fileID: 1899288733}
@@ -3075,21 +3065,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4761e0d97c017b409e2d62a43527c4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1813901707
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6865705020597790645}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
 --- !u!114 &1793686572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3130,7 +3105,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6865705020597790645}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
   m_Name: 

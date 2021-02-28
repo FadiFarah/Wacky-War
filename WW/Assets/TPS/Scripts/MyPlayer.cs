@@ -27,7 +27,6 @@ public class MyPlayer : MonoBehaviourPun
     public Camera secondaryCam;
 
     private bool throwsnow;
-    private double timeToReachGoal;
 
 
     void Awake()
