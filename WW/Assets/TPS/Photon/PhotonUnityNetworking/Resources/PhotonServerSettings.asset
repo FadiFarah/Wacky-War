@@ -34,5 +34,6 @@ MonoBehaviour:
   - RespawnSpaceship
   - Shoot
   - Explode
+  - GetDamage
   DisableAutoOpenWizard: 1
   ShowSettings: 0

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
 
 public class MyPlayer : MonoBehaviourPun
 {
@@ -20,6 +21,14 @@ public class MyPlayer : MonoBehaviourPun
     public List<AudioSource> footsteps;
     int num = 0;
 
+    //Health
+    public Image HealthfillImage;
+    public float playerHealth=1;
+    public GameObject healthBar;
+
+    //chatSystem
+    public GameObject chatSystem;
+
     private CharacterController characterController;
     private GameObject SnowBall;
     private Animator anim;
@@ -35,6 +44,7 @@ public class MyPlayer : MonoBehaviourPun
         { 
             joystick = GameObject.Find("Joystick").GetComponent<FixedJoystick>();
             characterController = GetComponent<CharacterController>();
+            chatSystem.SetActive(true);
         }
     }
     void Start()
@@ -45,6 +55,7 @@ public class MyPlayer : MonoBehaviourPun
             GameObject.Find("JumpButton").GetComponent<FixedJumpButton>().SetPlayer(this);
             crossHairPrefab = Instantiate(crossHairPrefab);
             isgrounded = characterController.isGrounded;
+            healthBar.SetActive(true);
         }
     }
     void Update()
@@ -157,6 +168,27 @@ public class MyPlayer : MonoBehaviourPun
             anim.SetTrigger("jump");
             float jumpVelocity = Mathf.Sqrt(-2 * gravity * JumpForce);
             velocityY = jumpVelocity;
+        }
+    }
+    /*public void Crouch()
+    {
+        if (anim.GetFloat("Speed")==0)
+        {
+            if (anim.GetBool("crouch"))
+                anim.SetBool("crouch", false);
+            else anim.SetBool("crouch", true);
+        }
+    }*/
+
+    [PunRPC]
+    public void GetDamage(float amount)
+    {
+        if (photonView.IsMine)
+        {
+            playerHealth -= amount;
+            if(photonView.IsMine)
+                HealthfillImage.fillAmount = playerHealth;
+
         }
     }
 

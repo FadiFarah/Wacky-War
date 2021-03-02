@@ -63,7 +63,11 @@ public class Snowball_Collision : MonoBehaviourPun
     {
         //Don't count collisions with other bullets
         if (collision.collider.CompareTag("Bullet")) return;
-
+        if (collision.transform.tag=="Player" && !collision.transform.GetComponent<PhotonView>().IsMine)
+        {
+            MyPlayer player = collision.gameObject.GetComponent<MyPlayer>();
+            player.photonView.RPC("GetDamage", RpcTarget.AllBuffered, 0.1f);
+        }
         //Count up collisions
         collisions++;
 
