@@ -66,7 +66,7 @@ public class Snowball_Collision : MonoBehaviourPun
         if (collision.transform.tag=="Player" && !collision.transform.GetComponent<PhotonView>().IsMine)
         {
             MyPlayer player = collision.gameObject.GetComponent<MyPlayer>();
-            player.photonView.RPC("GetDamage", RpcTarget.AllBuffered, 0.1f);
+            player.photonView.RPC("GetDamage", RpcTarget.AllBuffered, 0.5f);
         }
         //Count up collisions
         collisions++;

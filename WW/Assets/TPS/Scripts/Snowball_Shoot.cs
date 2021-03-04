@@ -20,10 +20,12 @@ public class Snowball_Shoot : MonoBehaviourPun
     public float timeBetweenShooting, spread, reloadTime, timebetweenShots;
     public int magazineSize, bulletsPerTab;
     public bool allowButtonHold;
-    int bulletsLeft, bulletsShot;
+    [HideInInspector]
+    public int bulletsLeft, bulletsShot;
 
     //bools
-    bool shooting, readyToShoot, reloading;
+    public bool shooting;
+    bool readyToShoot, reloading;
 
     //Reference
     public Camera fpscam;
@@ -36,12 +38,20 @@ public class Snowball_Shoot : MonoBehaviourPun
     //Bug fixing purposes
     public bool allowInvoke = true;
 
+    public bool enableMobileInputs;
     private void Awake()
     {
         //make sure magazine is full
         bulletsLeft = magazineSize;
         ammunationDisplay = GameObject.Find("AmmunationDisplay").GetComponent<TextMeshProUGUI>();
         readyToShoot = true;
+        enableMobileInputs = gameObject.GetComponent<MyPlayer>().enableMobileInputs;
+        if (photonView.IsMine)
+        {
+            GameObject.Find("ReloadButton").GetComponent<FixedReloadButton>().SetPlayer(this);
+            GameObject.Find("ShootButton").GetComponent<FixedShootButton>().SetPlayer(this);
+        }
+
     }
     void Start()
     {
@@ -61,9 +71,13 @@ public class Snowball_Shoot : MonoBehaviourPun
     }
     private void MyInput()
     {
-        //Check if allowed to hold down button and take corresponding input
-        if (allowButtonHold) shooting = Input.GetKey(KeyCode.CapsLock);
-        else shooting = Input.GetKeyDown(KeyCode.CapsLock);
+        if (!enableMobileInputs)
+        {
+            //Check if allowed to hold down button and take corresponding input
+            if (allowButtonHold) shooting = Input.GetKey(KeyCode.CapsLock);
+            else shooting = Input.GetKeyDown(KeyCode.CapsLock);
+        }
+
 
         //Reloading
         if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading) Reload();
@@ -71,78 +85,79 @@ public class Snowball_Shoot : MonoBehaviourPun
         if (readyToShoot && shooting && !reloading && bulletsLeft <= 0) Reload();
 
         //Shooting
-        if(readyToShoot && shooting && !reloading && bulletsLeft > 0)
+        if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
         {
             //Set bullets shot to 0
             bulletsShot = 0;
-
             photonView.RPC("Shoot", RpcTarget.All);
         }
     }
     [PunRPC]
-    private void Shoot()
+    public void Shoot()
     {
-
-        anim.SetTrigger("throw");
-        bulletInHand.SetActive(false);
-        shootSound.Play();
-        readyToShoot = false;
-        //Find the exact hit position using a raycast
-        Ray ray = fpscam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        RaycastHit hit;
-        transform.rotation = new Quaternion(0, Camera.main.transform.rotation.y, 0, Camera.main.transform.rotation.w);
-        //attackPoint.transform.eulerAngles = new Vector3(ray.direction.x, fpscam.transform.eulerAngles.y, ray.direction.z);
-
-        //check if ray hits something
-        Vector3 targetPoint;
-        if (Physics.Raycast(ray, out hit))
-            targetPoint = hit.point;
-        else
-            targetPoint = ray.GetPoint(70); //Just a point far away from the player
-
-        //Calculate direction from attackPoint to targetPoint
-        Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
-
-        //Calculate spread
-        float x = Random.Range(-spread, spread);
-        float y = Random.Range(-spread, spread);
-
-        //Calculate new direction with spread;
-        Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0); //Just adds spread to last
-
-        //Instantiate bullet/projectile
-        if (photonView.IsMine)
+        if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
         {
-            GameObject currentBullet = PhotonNetwork.Instantiate(bullet.name, attackPoint.position, Quaternion.identity);
+            
+            anim.SetTrigger("throw");
+            bulletInHand.SetActive(false);
+            shootSound.Play();
+            readyToShoot = false;
+            //Find the exact hit position using a raycast
+            Ray ray = fpscam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            RaycastHit hit;
+            transform.rotation = new Quaternion(0, Camera.main.transform.rotation.y, 0, Camera.main.transform.rotation.w);
+            //attackPoint.transform.eulerAngles = new Vector3(ray.direction.x, fpscam.transform.eulerAngles.y, ray.direction.z);
 
-            //Rotate bullet to shoot direction
-            currentBullet.transform.forward = directionWithSpread.normalized;
-            //Add forces to bullet
-            currentBullet.GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
-            currentBullet.GetComponent<Rigidbody>().AddForce(fpscam.transform.up * upwardForce, ForceMode.Impulse);
-        }
-        //Instantiate muzzle flash, if you have one
-        if (muzzleFlash != null)
-        {
-            Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
-        }
+            //check if ray hits something
+            Vector3 targetPoint;
+            if (Physics.Raycast(ray, out hit))
+                targetPoint = hit.point;
+            else
+                targetPoint = ray.GetPoint(70); //Just a point far away from the player
 
+            //Calculate direction from attackPoint to targetPoint
+            Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
 
-        bulletsLeft--;
-        bulletsShot++;
+            //Calculate spread
+            float x = Random.Range(-spread, spread);
+            float y = Random.Range(-spread, spread);
 
-        if (photonView.IsMine)
-        {
-            //Invoke resetShot function (if not already invoked)
-            if (allowInvoke)
+            //Calculate new direction with spread;
+            Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0); //Just adds spread to last
+
+            //Instantiate bullet/projectile
+            if (photonView.IsMine)
             {
-                Invoke("ResetShot", timeBetweenShooting);
-                allowInvoke = false;
+                GameObject currentBullet = PhotonNetwork.Instantiate(bullet.name, attackPoint.position, Quaternion.identity);
+                //Rotate bullet to shoot direction
+                currentBullet.transform.forward = directionWithSpread.normalized;
+                //Add forces to bullet
+                currentBullet.GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
+                currentBullet.GetComponent<Rigidbody>().AddForce(fpscam.transform.up * upwardForce, ForceMode.Impulse);
+            }
+            //Instantiate muzzle flash, if you have one
+            if (muzzleFlash != null)
+            {
+                Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
             }
 
-            //if more than one bulletsPerTab make sure to repeat shoot function
-            if (bulletsShot < bulletsPerTab && bulletsLeft > 0)
-                Invoke("Shoot", timebetweenShots);
+
+            bulletsLeft--;
+            bulletsShot++;
+
+            if (photonView.IsMine)
+            {
+                //Invoke resetShot function (if not already invoked)
+                if (allowInvoke)
+                {
+                    Invoke("ResetShot", timeBetweenShooting);
+                    allowInvoke = false;
+                }
+
+                //if more than one bulletsPerTab make sure to repeat shoot function
+                if (bulletsShot < bulletsPerTab && bulletsLeft > 0)
+                    Invoke("Shoot", timebetweenShots);
+            }
         }
     }
     
@@ -152,8 +167,9 @@ public class Snowball_Shoot : MonoBehaviourPun
         readyToShoot = true;
         allowInvoke = true;
         bulletInHand.SetActive(true);
+        shooting = false;
     }
-    private void Reload()
+    public void Reload()
     {
         reloading = true;
         Invoke("ReloadFinished", reloadTime);
@@ -162,5 +178,6 @@ public class Snowball_Shoot : MonoBehaviourPun
     {
         bulletsLeft = magazineSize;
         reloading = false;
+        shooting = false;
     }
 }

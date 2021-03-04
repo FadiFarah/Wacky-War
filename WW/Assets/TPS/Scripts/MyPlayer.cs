@@ -15,7 +15,10 @@ public class MyPlayer : MonoBehaviourPun
     float currentSpeed;
     float speedVelocity;
     public float JumpForce;
+
     public bool isgrounded;
+    public bool iscrouching;
+    public bool issliding;
 
     //sounds
     public List<AudioSource> footsteps;
@@ -28,6 +31,9 @@ public class MyPlayer : MonoBehaviourPun
 
     //chatSystem
     public GameObject chatSystem;
+
+    //teams
+    public GameObject teamText;
 
     private CharacterController characterController;
     private GameObject SnowBall;
@@ -43,29 +49,35 @@ public class MyPlayer : MonoBehaviourPun
         if(photonView.IsMine)
         { 
             joystick = GameObject.Find("Joystick").GetComponent<FixedJoystick>();
+            iscrouching = false;
             characterController = GetComponent<CharacterController>();
             chatSystem.SetActive(true);
+            teamText.SetActive(true);
+            teamText.GetComponent<Text>().text = "Team : "+PhotonNetwork.LocalPlayer.CustomProperties["Team"];
         }
     }
     void Start()
     {
+        
         if (photonView.IsMine)
         {
             anim = GetComponent<Animator>();
             GameObject.Find("JumpButton").GetComponent<FixedJumpButton>().SetPlayer(this);
+            GameObject.Find("SlideButton").GetComponent<FixedSlideButton>().SetPlayer(this);
+            GameObject.Find("CrouchButton").GetComponent<FixedCrouchButton>().SetPlayer(this);
             crossHairPrefab = Instantiate(crossHairPrefab);
             isgrounded = characterController.isGrounded;
             healthBar.SetActive(true);
         }
+
     }
     void Update()
     {
-      
+        
         if (photonView.IsMine)
         {
             LocalPlayerUpdate();
         }
-
     }
     void LocalPlayerUpdate()
     {
@@ -170,26 +182,73 @@ public class MyPlayer : MonoBehaviourPun
             velocityY = jumpVelocity;
         }
     }
-    /*public void Crouch()
+
+    public void Slide()
     {
-        if (anim.GetFloat("Speed")==0)
+        if (photonView.IsMine)
         {
-            if (anim.GetBool("crouch"))
-                anim.SetBool("crouch", false);
-            else anim.SetBool("crouch", true);
+           anim.SetTrigger("Slide");
+           Invoke("ResetSlideTrigger", 1f);
         }
-    }*/
+    }
+    public void ResetSlideTrigger()
+    {
+        anim.ResetTrigger("Slide");
+    }
+    public void Crouch()
+    {
+        if (photonView.IsMine)
+        {
+            if (anim.GetBool("crouch") == false)
+                anim.SetBool("crouch", true);
+            else if (anim.GetBool("crouch") == true)
+                anim.SetBool("crouch", false);
+        }
+        
+    }
 
     [PunRPC]
     public void GetDamage(float amount)
     {
+
+            playerHealth -= amount;
+        if (playerHealth <= 0 && photonView.IsMine)
+        {
+            Death();
+        }
+        if(photonView.IsMine)
+            HealthfillImage.fillAmount = playerHealth;
+    }
+    [PunRPC]
+    public void Hideplayer()
+    {
         if (photonView.IsMine)
         {
-            playerHealth -= amount;
-            if(photonView.IsMine)
-                HealthfillImage.fillAmount = playerHealth;
-
+            GameObject.Find("SecondaryCam").GetComponent<MyCamera>().enabled = false;
+            GameObject.Find("Main Camera").GetComponent<MyCamera>().enabled = false;
+            GameObject.Find("Main Camera").GetComponent<DeathCam>().enabled = true;
         }
+        gameObject.SetActive(false);
+           Invoke("RespawnPlayer", 10f);
+            
+    }
+    public void RespawnPlayer()
+    {
+        gameObject.SetActive(true);
+        playerHealth = 1;
+        if (photonView.IsMine)
+        {
+            HealthfillImage.fillAmount = playerHealth;
+            gameObject.GetComponent<Snowball_Shoot>().bulletsLeft = gameObject.GetComponent<Snowball_Shoot>().magazineSize;
+            GameObject.Find("Main Camera").GetComponent<DeathCam>().enabled = false;
+            GameObject.Find("SecondaryCam").GetComponent<MyCamera>().enabled = true;
+            GameObject.Find("Main Camera").GetComponent<MyCamera>().enabled = true;
+        }
+    }
+    void Death()
+    {
+        anim.SetTrigger("death");
+        photonView.RPC("Hideplayer",RpcTarget.All);
     }
 
     

@@ -35,5 +35,10 @@ MonoBehaviour:
   - Shoot
   - Explode
   - GetDamage
+  - TeamCountUpdate
+  - HideplayerMesh
+  - Hideplayer
+  - Slide
+  - Crouch
   DisableAutoOpenWizard: 1
   ShowSettings: 0
