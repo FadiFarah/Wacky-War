@@ -172,11 +172,15 @@ public class Snowball_Shoot : MonoBehaviourPun
     public void Reload()
     {
         reloading = true;
+        anim.SetTrigger("reload");
+        gameObject.GetComponent<MyPlayer>().isreloading = true;
         Invoke("ReloadFinished", reloadTime);
     }
     private void ReloadFinished()
     {
         bulletsLeft = magazineSize;
+        anim.ResetTrigger("reload");
+        gameObject.GetComponent<MyPlayer>().isreloading = false;
         reloading = false;
         shooting = false;
     }

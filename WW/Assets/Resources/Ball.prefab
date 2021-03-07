@@ -54,7 +54,7 @@ MeshRenderer:
   m_GameObject: {fileID: 6096811058807987435}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -159,7 +159,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: -8556430338234738414}
   viewIdField: 0
-  InstantiationId: 0
+  InstantiationId: 1
   isRuntimeInstantiated: 0
 --- !u!114 &-8556430338234738414
 MonoBehaviour:

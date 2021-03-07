@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Photon.Pun;
+using System.Collections.Generic;
 
 public class Snowball_Collision : MonoBehaviourPun
 {
@@ -25,9 +26,13 @@ public class Snowball_Collision : MonoBehaviourPun
 
     int collisions;
     PhysicMaterial physics_mat;
+
+    GameObject target;
+
     void Start()
     {
         Setup();
+        target = GetLocalPlayer();
     }
     private void Update()
     {
@@ -38,6 +43,7 @@ public class Snowball_Collision : MonoBehaviourPun
             //Count down lifetime
             maxLifetime -= Time.deltaTime;
             if (maxLifetime <= 0) photonView.RPC("Explode", RpcTarget.All);
+            
         }
     }
     [PunRPC]
@@ -63,11 +69,13 @@ public class Snowball_Collision : MonoBehaviourPun
     {
         //Don't count collisions with other bullets
         if (collision.collider.CompareTag("Bullet")) return;
-        if (collision.transform.tag=="Player" && !collision.transform.GetComponent<PhotonView>().IsMine)
+        if (collision.transform.tag == "Player" && !collision.transform.GetComponent<PhotonView>().IsMine && !collision.transform.IsChildOf(target.transform))
         {
             MyPlayer player = collision.gameObject.GetComponent<MyPlayer>();
             player.photonView.RPC("GetDamage", RpcTarget.AllBuffered, 0.5f);
         }
+
+       
         //Count up collisions
         collisions++;
 
@@ -96,5 +104,17 @@ public class Snowball_Collision : MonoBehaviourPun
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, explosionRange);
+    }
+    GameObject GetLocalPlayer()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in players)
+        {
+            if (player.GetComponent<PhotonView>().IsMine)
+            {
+                return player;
+            }
+        }
+        return null;
     }
 }

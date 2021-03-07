@@ -19,6 +19,7 @@ public class MyPlayer : MonoBehaviourPun
     public bool isgrounded;
     public bool iscrouching;
     public bool issliding;
+    public bool isreloading;
 
     //sounds
     public List<AudioSource> footsteps;
@@ -110,15 +111,18 @@ public class MyPlayer : MonoBehaviourPun
             //+cameraTransform.euelerAngles.y means to rotate the player as the camera's y rotation.
             float rotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, rotation, ref currentVelocity, smoothRotationTime);
-            if (!footsteps[0].isPlaying)
+            if (isreloading == false)
             {
-                footsteps[0].Play();
-                num = 1;
-            }
-            if (!footsteps[1].isPlaying)
-            {
-                footsteps[1].Play();
-                num = 0;
+                if (!footsteps[0].isPlaying)
+                {
+                    footsteps[0].Play();
+                    num = 1;
+                }
+                if (!footsteps[1].isPlaying)
+                {
+                    footsteps[1].Play();
+                    num = 0;
+                }
             }
         }
         else
@@ -227,23 +231,34 @@ public class MyPlayer : MonoBehaviourPun
             GameObject.Find("SecondaryCam").GetComponent<MyCamera>().enabled = false;
             GameObject.Find("Main Camera").GetComponent<MyCamera>().enabled = false;
             GameObject.Find("Main Camera").GetComponent<DeathCam>().enabled = true;
+
         }
-        gameObject.SetActive(false);
-           Invoke("RespawnPlayer", 10f);
+        else
+        {
+            gameObject.SetActive(false);
+        }
+
+        Invoke("RespawnPlayer", 10f);
             
     }
     public void RespawnPlayer()
     {
-        gameObject.SetActive(true);
+        
         playerHealth = 1;
         if (photonView.IsMine)
         {
             HealthfillImage.fillAmount = playerHealth;
             gameObject.GetComponent<Snowball_Shoot>().bulletsLeft = gameObject.GetComponent<Snowball_Shoot>().magazineSize;
-            GameObject.Find("Main Camera").GetComponent<DeathCam>().enabled = false;
-            GameObject.Find("SecondaryCam").GetComponent<MyCamera>().enabled = true;
-            GameObject.Find("Main Camera").GetComponent<MyCamera>().enabled = true;
+                GameObject.Find("Main Camera").GetComponent<DeathCam>().enabled = false;
+                GameObject.Find("SecondaryCam").GetComponent<MyCamera>().enabled = true;
+                GameObject.Find("Main Camera").GetComponent<MyCamera>().enabled = true;
+            
         }
+        else
+        {
+            gameObject.SetActive(true);
+        }
+        
     }
     void Death()
     {
