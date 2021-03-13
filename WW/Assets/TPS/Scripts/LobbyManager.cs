@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using System.Collections.Generic;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
@@ -11,6 +12,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public GameObject roomUI;
     public GameObject connectUI;
     public GameObject lobbyUI;
+    public GameObject createRoomUI;
+    public GameObject JoinRoomUI;
 
     [Header("---UI Text---")]
     public Text statusText;
@@ -25,11 +28,20 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public InputField userName;
     public Button startButton;
 
+    //On-Click values
+    public int sceneNumber;
+    public Image roomImage;
+    public Sprite map1Image;
+    public Sprite map2Image;
+    public Sprite map3Image;
+
     void Awake()
     {
         PhotonNetwork.ConnectUsingSettings();
         PhotonNetwork.AutomaticallySyncScene = true;
-    }
+        roomImage.sprite = map1Image;
+        sceneNumber = 1;
+}
     private void OnEnable()
     {
         base.OnEnable();
@@ -101,16 +113,35 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         GetComponent<LobbyUIManager>().RemovePlayer(otherPlayer.NickName);
     }
     #region ButtonClicks
+    public void Onclick_CreateRoomMenuBtn()
+    {
+        roomUI.SetActive(false);
+        JoinRoomUI.SetActive(false);
+        connectUI.SetActive(false);
+        createRoomUI.SetActive(true);
+   
+    }
+    public void Onclick_JoinRoomMenuBtn()
+    {
+        roomUI.SetActive(false);
+        connectUI.SetActive(false);
+        createRoomUI.SetActive(false);
+        JoinRoomUI.SetActive(true);
+    }
     public void Onclick_CreateBtn()
     {
+        createRoomUI.SetActive(false);
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = 4;
+        PhotonNetwork.LocalPlayer.NickName = userName.text;
         PhotonNetwork.CreateRoom(createRoom.text,roomOptions, TypedLobby.Default,null);
     }
     public void Onclick_JoinBtn()
     {
+        JoinRoomUI.SetActive(false);
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = 4;
+        PhotonNetwork.LocalPlayer.NickName = userName.text;
         PhotonNetwork.JoinOrCreateRoom(joinRoom.text, roomOptions, TypedLobby.Default, null);
     }
     public void Onclick_PlayNow()
@@ -124,6 +155,29 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRandomRoom();
         statusText.text = "Creating a room, please wait...";
 
+    }
+    public void Onclick_CancelBtn()
+    {
+
+        roomUI.SetActive(true);
+        connectUI.SetActive(false);
+        createRoomUI.SetActive(false);
+        JoinRoomUI.SetActive(false);
+    }
+    public void Onclick_Map1Btn()
+    {
+        roomImage.sprite = map1Image;
+        sceneNumber = 1;
+    }
+    public void Onclick_Map2Btn()
+    {
+        roomImage.sprite = map2Image;
+        sceneNumber = 2;
+    }
+    public void Onclick_Map3Btn()
+    {
+        roomImage.sprite = map3Image;
+        sceneNumber = 3;
     }
     #endregion
     #region My_Functions
@@ -154,7 +208,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             if (count <= 4)
             {
                 lobbyText.text = "Loading the game...";
-                PhotonNetwork.LoadLevel(1);
+                PhotonNetwork.LoadLevel(sceneNumber);
             }
         }
     }

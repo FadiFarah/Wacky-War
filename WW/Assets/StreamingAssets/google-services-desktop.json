@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "883696263947",
+    "firebase_url": "https://wackywar-f9c21-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "wackywar-f9c21",
+    "storage_bucket": "wackywar-f9c21.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883696263947:android:30a08f5520cbb00d8d780e",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.WackyWarSnowBallbattle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883696263947-labfr25fv9g61a27bi9ht8c3nggtbtl2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2CFfIpLKKe7nMPyoIx9bnxUroRFlqTaA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883696263947-labfr25fv9g61a27bi9ht8c3nggtbtl2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
