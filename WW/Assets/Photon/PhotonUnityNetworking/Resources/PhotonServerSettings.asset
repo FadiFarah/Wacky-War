@@ -19,7 +19,7 @@ MonoBehaviour:
     AppVersion: 
     UseNameServer: 1
     FixedRegion: 
-    Server: 
+    Server: eu
     Port: 0
     Protocol: 0
     EnableLobbyStatistics: 0
@@ -37,4 +37,4 @@ MonoBehaviour:
   - RespawnSpaceship
   - Shoot
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
