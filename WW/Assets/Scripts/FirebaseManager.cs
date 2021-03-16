@@ -52,8 +52,13 @@ public class FirebaseManager : MonoBehaviour
     public TMP_InputField usernameInfoField;
     public TMP_InputField passwordInfoField;
 
+    [Header("ForgotPass")]
+    public TMP_InputField emailForgotPassField;
+    public TMP_Text confirmForgotPassText;
+
     private void Awake()
     {
+        
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
             dependencyStatus = task.Result;
@@ -66,6 +71,12 @@ public class FirebaseManager : MonoBehaviour
                 Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
             }
         });
+    }
+    private void Start()
+    {
+        DontDestroyOnLoad(GameObject.Find("FirebaseManager"));
+        DontDestroyOnLoad(GameObject.Find("Canvas"));
+        DontDestroyOnLoad(GameObject.Find("UIManager"));
     }
     private void InitializeFirebase()
     {
@@ -111,6 +122,10 @@ public class FirebaseManager : MonoBehaviour
         StartCoroutine(UpdateUsernameAuth(usernameInfoField.text));
         StartCoroutine(UpdateUsernameDatabase(usernameInfoField.text));
         StartCoroutine(UpdatePasswordAuth(passwordInfoField.text));
+    }
+    public void SendPassResetButton()
+    {
+        StartCoroutine(PasswordResetEmail(emailForgotPassField.text));
     }
 
     //Function for the Profile button
@@ -158,7 +173,7 @@ public class FirebaseManager : MonoBehaviour
                     message = "Wrong Password";
                     break;
                 case AuthError.InvalidEmail:
-                    message = "Invalid Password";
+                    message = "Invalid Email";
                     break;
                 case AuthError.UserNotFound:
                     message = "Account does not exist";
@@ -262,12 +277,33 @@ public class FirebaseManager : MonoBehaviour
                         warningRegisterText.text = "";
                         ClearLoginFields();
                         ClearRegisterFields();
+                        StartCoroutine(UpdateUsernameDatabase(_username));
+                        StartCoroutine(UpdateDeaths(0));
+                        StartCoroutine(UpdateKills(0));
+                        StartCoroutine(UpdateXp(1));
                     }
                 }
             }
         }
     }
 
+    private IEnumerator PasswordResetEmail(string _email)
+    {
+        var MailTask = auth.SendPasswordResetEmailAsync(_email);
+        yield return new WaitUntil(predicate: () => MailTask.IsCompleted);
+
+        if (MailTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {MailTask.Exception}");
+        }
+        else
+        {
+            //Password reset email is sent
+            confirmForgotPassText.text = "An email has been sent!";
+        }
+
+
+    }
     private IEnumerator UpdateUsernameAuth(string _username)
     {
         //Create a user profile and set the username
@@ -338,7 +374,7 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 
-    private IEnumerator GetKills()
+    public IEnumerator GetKills()
     {
         //Get the currently logged in user data
         var DBTask = DBreference.Child("users").Child(user.UserId).GetValueAsync();
@@ -355,12 +391,12 @@ public class FirebaseManager : MonoBehaviour
             DataSnapshot snapshot = DBTask.Result;
 
             string currentkills = snapshot.Child("kills").Value.ToString();
-            int kills = Convert.ToInt32(currentkills);
+            int kills = Convert.ToInt32(currentkills)+1;
             StartCoroutine(UpdateKills(kills));
 
         }
     }
-    private IEnumerator GetDeaths()
+    public IEnumerator GetDeaths()
     {
         //Get the currently logged in user data
         var DBTask = DBreference.Child("users").Child(user.UserId).GetValueAsync();
@@ -377,7 +413,7 @@ public class FirebaseManager : MonoBehaviour
             DataSnapshot snapshot = DBTask.Result;
 
             string currentdeaths = snapshot.Child("deaths").Value.ToString();
-            int deaths = Convert.ToInt32(currentdeaths);
+            int deaths = Convert.ToInt32(currentdeaths)+1;
             StartCoroutine(UpdateDeaths(deaths));
 
         }
@@ -386,7 +422,7 @@ public class FirebaseManager : MonoBehaviour
     {
         //Set the currently logged in user kills
 
-        var DBTask = DBreference.Child("users").Child(user.UserId).Child("kills").SetValueAsync(_kills+1);
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("kills").SetValueAsync(_kills);
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
@@ -403,7 +439,7 @@ public class FirebaseManager : MonoBehaviour
     private IEnumerator UpdateDeaths(int _deaths)
     {
         //Set the currently logged in user deaths
-        var DBTask = DBreference.Child("users").Child(user.UserId).Child("deaths").SetValueAsync(_deaths+1);
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("deaths").SetValueAsync(_deaths);
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 

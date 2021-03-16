@@ -10,7 +10,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     [Header("---UI Screens---")]
     public GameObject roomUI;
-    public GameObject connectUI;
     public GameObject lobbyUI;
     public GameObject createRoomUI;
     public GameObject JoinRoomUI;
@@ -27,6 +26,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public InputField joinRoom;
     public InputField userName;
     public Button startButton;
+
+    UIManager uiManager;
 
     //On-Click values
     public int sceneNumber;
@@ -63,17 +64,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedLobby()
     {
-        connectUI.SetActive(false);
-        //roomUI.SetActive(true);
-        //userName.text = name;
         statusText.text = "Joined to Lobby";
     }
     public override void OnJoinedRoom()
     {
         int sizeOfPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
-        roomUI.SetActive(false);
         AssignTeam(sizeOfPlayers);
-        lobbyUI.SetActive(true);
+        UIManager.instance.RoomScreen();
 
        // PhotonNetwork.CurrentRoom.Players;
         foreach(Player p in PhotonNetwork.CurrentRoom.Players.Values)
@@ -95,7 +92,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     }
     public override void OnDisconnected(DisconnectCause cause)
     {
-        connectUI.SetActive(true);
         connectingText.text = "Disconnected... "+cause.ToString();
         roomUI.SetActive(false);
     }
@@ -119,35 +115,25 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     #region ButtonClicks
     public void Onclick_CreateRoomMenuBtn()
     {
-        roomUI.SetActive(false);
-        JoinRoomUI.SetActive(false);
-        connectUI.SetActive(false);
-        createRoomUI.SetActive(true);
-   
+        UIManager.instance.CreateRoomScreen();
     }
     public void Onclick_JoinRoomMenuBtn()
     {
-        roomUI.SetActive(false);
-        connectUI.SetActive(false);
-        createRoomUI.SetActive(false);
-        JoinRoomUI.SetActive(true);
+        UIManager.instance.JoinRoomScreen();
     }
     public void Onclick_CreateBtn()
     {
         name = fb.user.DisplayName;
         id = fb.user.UserId;
-        createRoomUI.SetActive(false);
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = 4;
         PhotonNetwork.LocalPlayer.NickName = name;
-        Debug.Log(name);
         PhotonNetwork.CreateRoom(createRoom.text,roomOptions, TypedLobby.Default,null);
     }
     public void Onclick_JoinBtn()
     {
         name = fb.user.DisplayName;
         id = fb.user.UserId;
-        JoinRoomUI.SetActive(false);
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = 4;
         PhotonNetwork.LocalPlayer.NickName = name;
@@ -165,11 +151,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     }
     public void Onclick_CancelBtn()
     {
-
-        roomUI.SetActive(true);
-        connectUI.SetActive(false);
-        createRoomUI.SetActive(false);
-        JoinRoomUI.SetActive(false);
+        GetComponent<LobbyUIManager>().RemovePlayer(PhotonNetwork.LocalPlayer.NickName);
+        PhotonNetwork.LeaveRoom();
+        UIManager.instance.LobbyScreen();
     }
     public void Onclick_Map1Btn()
     {
@@ -239,7 +223,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             if (PhotonNetwork.IsMasterClient)
             {
                 count++;
-                if (count == 4)
+                if (count >= 2)
                     startBtnText.text = "START!";
                 else
                     startBtnText.text = "Only " + count + "/ 4 players are Ready.";

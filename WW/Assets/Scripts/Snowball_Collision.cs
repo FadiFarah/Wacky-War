@@ -23,16 +23,21 @@ public class Snowball_Collision : MonoBehaviourPun
     public int maxCollisions;
     public float maxLifetime;
     public bool explodeOnTouch = true;
+    public bool kill = false;
 
     int collisions;
     PhysicMaterial physics_mat;
 
     GameObject target;
 
+    FirebaseManager fb;
+
     void Start()
     {
         Setup();
         target = GetLocalPlayer();
+        fb = GameObject.Find("FirebaseManager").GetComponent<FirebaseManager>();
+
     }
     private void Update()
     {
@@ -43,8 +48,8 @@ public class Snowball_Collision : MonoBehaviourPun
             //Count down lifetime
             maxLifetime -= Time.deltaTime;
             if (maxLifetime <= 0) photonView.RPC("Explode", RpcTarget.All);
-            
         }
+        
     }
     [PunRPC]
     private void Explode()
@@ -67,12 +72,19 @@ public class Snowball_Collision : MonoBehaviourPun
     }
     private void OnCollisionEnter(Collision collision)
     {
+        string name = fb.user.DisplayName;
+        string id = fb.user.UserId;
         //Don't count collisions with other bullets
         if (collision.collider.CompareTag("Bullet")) return;
         if (collision.transform.tag == "Player" && !collision.transform.GetComponent<PhotonView>().IsMine && !collision.transform.IsChildOf(target.transform))
         {
             MyPlayer player = collision.gameObject.GetComponent<MyPlayer>();
+            if (player.playerHealth <= 0.5f)
+            {
+                target.GetComponent<MyPlayer>().Kill();
+            }
             player.photonView.RPC("GetDamage", RpcTarget.AllBuffered, 0.5f);
+         
         }
 
        

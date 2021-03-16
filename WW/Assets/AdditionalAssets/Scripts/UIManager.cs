@@ -13,6 +13,10 @@ public class UIManager : MonoBehaviour
     public GameObject profileUI;
     public GameObject infoUI;
     public GameObject scoreboardUI;
+    public GameObject joinroomUI;
+    public GameObject createroomUI;
+    public GameObject roomUI;
+    public GameObject forgotpassUI;
 
     private void Awake()
     {
@@ -37,37 +41,61 @@ public class UIManager : MonoBehaviour
         profileUI.SetActive(false);
         infoUI.SetActive(false);
         scoreboardUI.SetActive(false);
+        joinroomUI.SetActive(false);
+        createroomUI.SetActive(false);
+        roomUI.SetActive(false);
+        forgotpassUI.SetActive(false);
     }
 
-    public void LoginScreen() //Back button
+    public void LoginScreen()
     {
         ClearScreen();
         loginUI.SetActive(true);
     }
-    public void RegisterScreen() // Regester button
+    public void RegisterScreen() 
     {
         ClearScreen();
         registerUI.SetActive(true);
     }
-    public void LobbyScreen() //Logged in
+    public void LobbyScreen() 
     {
         ClearScreen();
         lobbyUI.SetActive(true);
     }
-    public void ProfileScreen() //Logged in
+    public void ProfileScreen() 
     {
         ClearScreen();
         profileUI.SetActive(true);
     }
 
-    public void InfoScreen() //Logged in
+    public void InfoScreen() 
     {
         ClearScreen();
         infoUI.SetActive(true);
     }
-    public void ScoreboardScreen() //Scoreboard button
+    public void ScoreboardScreen() 
     {
         ClearScreen();
         scoreboardUI.SetActive(true);
+    }
+    public void JoinRoomScreen() 
+    {
+        ClearScreen();
+        joinroomUI.SetActive(true);
+    }
+    public void CreateRoomScreen() 
+    {
+        ClearScreen();
+        createroomUI.SetActive(true);
+    }
+    public void RoomScreen() 
+    {
+        ClearScreen();
+        roomUI.SetActive(true);
+    }
+    public void ForgotPassScreen()
+    {
+        ClearScreen();
+        forgotpassUI.SetActive(true);
     }
 }

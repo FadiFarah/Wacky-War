@@ -3033,6 +3033,8 @@ MonoBehaviour:
   chatSystem: {fileID: 2875048583093253604}
   teamText: {fileID: 1167564152}
   secondaryCam: {fileID: 1899288733}
+  kills: 0
+  deaths: 0
 --- !u!114 &6018651362558606017
 MonoBehaviour:
   m_ObjectHideFlags: 0

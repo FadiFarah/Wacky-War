@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
+using Firebase.Auth;
 
 public class MyPlayer : MonoBehaviourPun
 {
@@ -44,6 +45,9 @@ public class MyPlayer : MonoBehaviourPun
 
     private bool throwsnow;
 
+    FirebaseManager fb;
+    public int kills = 0;
+    public int deaths = 0;
 
     void Awake()
     {
@@ -55,6 +59,7 @@ public class MyPlayer : MonoBehaviourPun
             chatSystem.SetActive(true);
             teamText.SetActive(true);
             teamText.GetComponent<Text>().text = "Team : "+PhotonNetwork.LocalPlayer.CustomProperties["Team"];
+            UIManager.instance.ClearScreen();
         }
     }
     void Start()
@@ -70,6 +75,8 @@ public class MyPlayer : MonoBehaviourPun
             isgrounded = characterController.isGrounded;
             healthBar.SetActive(true);
         }
+        fb = GameObject.Find("FirebaseManager").GetComponent<FirebaseManager>();
+
 
     }
     void Update()
@@ -264,7 +271,19 @@ public class MyPlayer : MonoBehaviourPun
     {
         anim.SetTrigger("death");
         photonView.RPC("Hideplayer",RpcTarget.All);
+        StartCoroutine(fb.GetDeaths());
+        Debug.Log(fb.user.DisplayName + " is dead");
+        deaths++;
+        Debug.Log(deaths);
+    }
+    public void Kill()
+    {
+        StartCoroutine(fb.GetKills());
+        Debug.Log(fb.user.DisplayName + " got a kill");
+        kills++;
+        Debug.Log(kills);
+
     }
 
-    
+
 }
