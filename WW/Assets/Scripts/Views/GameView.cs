@@ -1,0 +1,1053 @@
+using ExitGames.Client.Photon;
+using Firebase;
+using Firebase.Auth;
+using Firebase.Database;
+using Photon.Pun;
+using Photon.Realtime;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.Rendering;
+using UnityEngine.UI;
+
+public class GameView : MonoBehaviourPunCallbacks
+{
+
+    //Firebase variables
+    [Header("Firebase")]
+    public DependencyStatus dependencyStatus;
+    public FirebaseAuth auth;
+    public FirebaseUser user;
+    public DatabaseReference DBreference;
+
+    public GameModel gameModel;
+    public GameController gameController;
+
+    //warnings/confirms
+    public TMP_Text warningLoginText;
+    public TMP_Text confirmLoginText;
+    public TMP_Text warningRegisterText;
+    public TMP_Text confirmForgotPassText;
+
+    //Lobby variables
+    [Header("Lobby")]
+    public TMP_InputField usernameLobbyField;
+    public TMP_InputField xpLobbyField;
+    public GameObject scoreElement;
+    public Transform scoreboardContent;
+
+    //Profile variables
+    [Header("Profile")]
+    public TMP_InputField usernameProfileField;
+    public TMP_InputField xpProfileField;
+    public TMP_InputField killsProfileField;
+    public TMP_InputField deathsProfileField;
+    public TMP_InputField rateProfileField;
+    public TMP_InputField winsProfileField;
+    public TMP_InputField losesProfileField;
+
+    [Header("Settings")]
+    //graphics
+    public RenderPipelineAsset high;
+    public RenderPipelineAsset medium;
+    public RenderPipelineAsset low;
+    public TMP_Text graphicsSettingsText;
+    //sounds
+    public AudioMixer masterVolumeMixer;
+    public Slider musicVolumeSettingsSlider;
+    public Slider inGameVolumeSettingsSlider;
+
+    [Header("Room")]
+    public Text RoomStartBtnText;
+    public Image roomImage;
+    public Sprite map1Image;
+    public Sprite map2Image;
+    public Sprite map3Image;
+    public GameObject playersContainer;
+    public GameObject playerAvatarPrefab;
+
+    void Awake()
+    {
+        PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.SendRate = 25; //20 default
+        PhotonNetwork.SerializationRate = 10;
+
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+        {
+            dependencyStatus = task.Result;
+            if (dependencyStatus == DependencyStatus.Available)
+            {
+                InitializeFirebase();
+            }
+            else
+            {
+                Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
+            }
+        });
+    }
+    void Start()
+    {
+        DontDestroyOnLoad(GameObject.Find("GameMVC"));
+        DontDestroyOnLoad(GameObject.Find("Canvas"));
+        DontDestroyOnLoad(GameObject.Find("UIManager"));
+        DontDestroyOnLoad(GameObject.Find("EventSystem"));
+    }
+    #region Database Connections
+
+    private void InitializeFirebase()
+    {
+        Debug.Log("Setting up Firebase Auth");
+        //Set the authentication instance object
+        auth = FirebaseAuth.DefaultInstance;
+        DBreference = FirebaseDatabase.DefaultInstance.RootReference;
+    }
+    public void LoginButton()
+    {
+        gameModel = gameController.gameModel;
+        StartCoroutine(Login(gameModel.Email, gameModel.Password));
+    }
+    public void RegisterButton()
+    {
+        gameModel = gameController.gameModel;
+        StartCoroutine(Register(gameModel.Email, gameModel.Password,gameModel.ConfirmPassword,gameModel.Username));
+    }
+    public void SaveDataButton()
+    {
+        gameModel = gameController.gameModel;
+        StartCoroutine(UpdateUsernameAuth(gameModel.Username));
+        StartCoroutine(UpdateUsernameDatabase(gameModel.Username));
+        StartCoroutine(UpdatePasswordAuth(gameModel.Password));
+    }
+    public void SaveSettingsButton()
+    {
+        gameModel = gameController.gameModel;
+        StartCoroutine(UpdateGraphics(gameModel.Graphics));
+        StartCoroutine(UpdateMusicVolume(gameModel.MusicVolume));
+        StartCoroutine(UpdateInGameVolume(gameModel.InGameVolume));
+    }
+    public void SendPassResetButton()
+    {
+        gameModel = gameController.gameModel;
+        StartCoroutine(PasswordResetEmail(gameModel.Email));
+    }
+    //Function for the Profile button
+    public void ProfileDataButton()
+    {
+        StartCoroutine(LoadProfileData());
+    }
+    //Function for the lobby button
+    public void LobbyDataButton()
+    {
+        StartCoroutine(LoadLobbyData());
+    }
+
+    //Function for the scoreboard button
+    public void ScoreboardButton()
+    {
+        StartCoroutine(LoadScoreboardData());
+    }
+    //Function for the Settings button
+    public void SettingsDataButton()
+    {
+        StartCoroutine(LoadSettingsData());
+    }
+    public void SignOutButton()
+    {
+        auth.SignOut();
+        UIManager.instance.LoginScreen();
+        gameController.ClearRegisterFields();
+        gameController.ClearLoginFields();
+    }
+    public IEnumerator Login(string _email,string _password)
+    {
+        //Call the Firebase auth function and passing the email and password
+        var LoginTask = auth.SignInWithEmailAndPasswordAsync(_email, _password);
+        //Wait until the task completes
+        yield return new WaitUntil(predicate: () => LoginTask.IsCompleted);
+
+        if (LoginTask.Exception != null)
+        {
+            //If there are errors handle them
+            Debug.LogWarning(message: $"Failed to register task with {LoginTask.Exception}");
+            FirebaseException firebaseEx = LoginTask.Exception.GetBaseException() as FirebaseException;
+            AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
+
+            string message = "Login Failed!";
+            switch (errorCode)
+            {
+                case AuthError.MissingEmail:
+                    message = "Missing Email";
+                    break;
+                case AuthError.MissingPassword:
+                    message = "Missing Password";
+                    break;
+                case AuthError.WrongPassword:
+                    message = "Wrong Password";
+                    break;
+                case AuthError.InvalidEmail:
+                    message = "Invalid Email";
+                    break;
+                case AuthError.UserNotFound:
+                    message = "Account does not exist";
+                    break;
+            }
+            warningLoginText.text = message;
+        }
+        else
+        {
+            //User is now logged in
+            //Now get the result
+            user = LoginTask.Result;
+            Debug.LogFormat("User signed in successfully: {0} ({1})", user.DisplayName, user.Email);
+            warningLoginText.text = "";
+            confirmLoginText.text = "Logged In";
+            StartCoroutine(LoadLobbyData());
+            StartCoroutine(GetSettings());
+
+            yield return new WaitForSeconds(2);
+
+
+            UIManager.instance.LobbyScreen();
+
+            confirmLoginText.text = "";
+            gameController.ClearLoginFields();
+            gameController.ClearRegisterFields();
+        }
+    }
+
+    private IEnumerator Register(string _email, string _password,string _confirmPassword, string _username)
+    {
+        if (_username == null)
+        {
+            //If the username field is blank show a warning
+            warningRegisterText.text = "Missing Username";
+        }
+        else if (_password != _confirmPassword)
+        {
+            //If the password does not match show a warning
+            warningRegisterText.text = "Password Does Not Match!";
+        }
+        else
+        {
+            //Call the Firebase auth signin function passing the email and password
+            var RegisterTask = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
+            //Wait until the task completes
+            yield return new WaitUntil(predicate: () => RegisterTask.IsCompleted);
+
+            if (RegisterTask.Exception != null)
+            {
+                //If there are errors handle them
+                Debug.LogWarning(message: $"Failed to register task with {RegisterTask.Exception}");
+                FirebaseException firebaseEx = RegisterTask.Exception.GetBaseException() as FirebaseException;
+                AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
+
+                string message = "Register Failed!";
+                switch (errorCode)
+                {
+                    case AuthError.MissingEmail:
+                        message = "Missing Email";
+                        break;
+                    case AuthError.MissingPassword:
+                        message = "Missing Password";
+                        break;
+                    case AuthError.WeakPassword:
+                        message = "Weak Password";
+                        break;
+                    case AuthError.EmailAlreadyInUse:
+                        message = "Email Already In Use";
+                        break;
+                }
+                warningRegisterText.text = message;
+            }
+            else
+            {
+                //User has now been created
+                //Now get the result
+                user = RegisterTask.Result;
+
+                if (user != null)
+                {
+                    //Create a user profile and set the username
+                    UserProfile profile = new UserProfile { DisplayName = _username };
+
+                    //Call the Firebase auth update user profile function passing the profile with the username
+                    var ProfileTask = user.UpdateUserProfileAsync(profile);
+                    //Wait until the task completes
+                    yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);
+
+                    if (ProfileTask.Exception != null)
+                    {
+                        //If there are errors handle them
+                        Debug.LogWarning(message: $"Failed to register task with {ProfileTask.Exception}");
+                        FirebaseException firebaseEx = ProfileTask.Exception.GetBaseException() as FirebaseException;
+                        AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
+                        warningRegisterText.text = "Username Set Failed!";
+                    }
+                    else
+                    {
+                        //Username is now set
+                        //Now return to login screen
+                        UIManager.instance.LoginScreen();
+                        warningRegisterText.text = "";
+                        gameController.ClearLoginFields();
+                        gameController.ClearRegisterFields();
+                        StartCoroutine(UpdateUsernameDatabase(_username));
+                        StartCoroutine(UpdateDeaths(0));
+                        StartCoroutine(UpdateKills(0));
+                        StartCoroutine(UpdateXp(1));
+                        StartCoroutine(UpdateWins(0));
+                        StartCoroutine(UpdateLoses(0));
+                        StartCoroutine(UpdateRate(0, 0));
+
+                    }
+                }
+            }
+        }
+    }
+
+    private IEnumerator PasswordResetEmail(string _email)
+    {
+        var MailTask = auth.SendPasswordResetEmailAsync(_email);
+        yield return new WaitUntil(predicate: () => MailTask.IsCompleted);
+
+        if (MailTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {MailTask.Exception}");
+        }
+        else
+        {
+            //Password reset email is sent
+            confirmForgotPassText.text = "An email has been sent!";
+        }
+    }
+
+    private IEnumerator UpdateUsernameAuth(string _username)
+    {
+        //Create a user profile and set the username
+        UserProfile profile = new UserProfile { DisplayName = _username };
+        //Call the Firebase auth update user profile function passing the profile with the username
+        var ProfileTask = user.UpdateUserProfileAsync(profile);
+        //Wait until the task completes
+        yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);
+
+        if (ProfileTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {ProfileTask.Exception}");
+        }
+        else
+        {
+            //Auth username is now updated
+        }
+    }
+    private IEnumerator UpdateUsernameDatabase(string _username)
+    {
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("username").SetValueAsync(_username);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Database username is updated
+        }
+    }
+
+    private IEnumerator UpdatePasswordAuth(string _password)
+    {
+
+        //Call the Firebase auth update user password function passing the password
+        var ProfileTask = user.UpdatePasswordAsync(_password);
+        //Wait until the task completes
+        yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);
+
+        if (ProfileTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {ProfileTask.Exception}");
+        }
+        else
+        {
+            Debug.Log("Password changed");
+            //Auth password is now updated
+        }
+    }
+
+
+    private IEnumerator UpdateXp(int _xp)
+    {
+        //Set the currently logged in user xp
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("xp").SetValueAsync(_xp);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Xp is now updated
+        }
+    }
+
+    public IEnumerator GetKills()
+    {
+        //Get the currently logged in user data
+        var DBTask = DBreference.Child("users").Child(user.UserId).GetValueAsync();
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Data has been retrieved
+            DataSnapshot snapshot = DBTask.Result;
+
+            string currentkills = snapshot.Child("kills").Value.ToString();
+            int kills = Convert.ToInt32(currentkills) + 1;
+            StartCoroutine(UpdateKills(kills));
+
+        }
+    }
+    public IEnumerator GetDeaths()
+    {
+        //Get the currently logged in user data
+        var DBTask = DBreference.Child("users").Child(user.UserId).GetValueAsync();
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Data has been retrieved
+            DataSnapshot snapshot = DBTask.Result;
+
+            string currentdeaths = snapshot.Child("deaths").Value.ToString();
+            int deaths = Convert.ToInt32(currentdeaths) + 1;
+            StartCoroutine(UpdateDeaths(deaths));
+
+        }
+    }
+    public IEnumerator GetWins()
+    {
+        var DBTask = DBreference.Child("users").Child(user.UserId).GetValueAsync();
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            DataSnapshot snapshot = DBTask.Result;
+            string currentwins = snapshot.Child("wins").Value.ToString();
+            int wins = Convert.ToInt32(currentwins) + 1;
+            StartCoroutine(UpdateWins(wins));
+        }
+    }
+
+    public IEnumerator GetLoses()
+    {
+        var DBTask = DBreference.Child("users").Child(user.UserId).GetValueAsync();
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            DataSnapshot snapshot = DBTask.Result;
+            string currentloses = snapshot.Child("loses").Value.ToString();
+            int loses = Convert.ToInt32(currentloses) + 1;
+            StartCoroutine(UpdateLoses(loses));
+        }
+    }
+    public IEnumerator GetRate()
+    {
+        var DBTask = DBreference.Child("users").Child(user.UserId).GetValueAsync();
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            DataSnapshot snapshot = DBTask.Result;
+            int currentkills = Convert.ToInt32(snapshot.Child("kills").Value.ToString());
+            int currentdeaths = Convert.ToInt32(snapshot.Child("deaths").Value.ToString());
+            StartCoroutine(UpdateRate(currentkills, currentdeaths));
+        }
+    }
+    public IEnumerator GetSettings()
+    {
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("settings").GetValueAsync();
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            DataSnapshot snapshot = DBTask.Result;
+            string currentgraphics = snapshot.Child("graphics").Value.ToString();
+            float currentmusicVol = float.Parse(snapshot.Child("musicvolume").Value.ToString());
+            float currentingameVol = float.Parse(snapshot.Child("ingamevolume").Value.ToString());
+            StartCoroutine(UpdateGraphics(currentgraphics));
+            StartCoroutine(UpdateMusicVolume(currentmusicVol));
+            StartCoroutine(UpdateInGameVolume(currentingameVol));
+            yield return new WaitForSeconds(2);
+        }
+    }
+    private IEnumerator UpdateKills(int _kills)
+    {
+        //Set the currently logged in user kills
+
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("kills").SetValueAsync(_kills);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Kills are now updated
+
+            StartCoroutine(GetRate());
+        }
+    }
+
+    private IEnumerator UpdateDeaths(int _deaths)
+    {
+        //Set the currently logged in user deaths
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("deaths").SetValueAsync(_deaths);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Deaths are now updated
+            StartCoroutine(GetRate());
+
+        }
+    }
+    private IEnumerator UpdateWins(int _wins)
+    {
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("wins").SetValueAsync(_wins);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Wins are now updated
+        }
+    }
+    private IEnumerator UpdateLoses(int _loses)
+    {
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("loses").SetValueAsync(_loses);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Loses are now updated
+        }
+    }
+
+    private IEnumerator UpdateRate(int _kills, int _deaths)
+    {
+        if (_deaths == 0)
+            _deaths = 1;
+        float num = (float)_kills / (float)_deaths;
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("rate").SetValueAsync(num);
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Rate is now updated
+        }
+    }
+
+    private IEnumerator UpdateGraphics(string _graphics)
+    {
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("settings").Child("graphics").SetValueAsync(_graphics);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Graphics are now updated
+            if (_graphics.ToUpper()=="HIGH")
+            {
+                GraphicsSettings.renderPipelineAsset = high;
+                Debug.Log("Default render pipeline asset is: " + GraphicsSettings.renderPipelineAsset.name);
+            }
+            else if (_graphics.ToUpper() == "MEDIUM")
+            {
+                GraphicsSettings.renderPipelineAsset = medium;
+                Debug.Log("Default render pipeline asset is: " + GraphicsSettings.renderPipelineAsset.name);
+            }
+            else if (_graphics.ToUpper() == "LOW")
+            {
+                GraphicsSettings.renderPipelineAsset = low;
+                Debug.Log("Default render pipeline asset is: " + GraphicsSettings.renderPipelineAsset.name);
+            }
+        }
+    }
+    private IEnumerator UpdateMusicVolume(float _musicvol)
+    {
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("settings").Child("musicvolume").SetValueAsync(_musicvol);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Music Vol are now updated
+            
+            masterVolumeMixer.SetFloat("musicVolume", _musicvol);
+        }
+    }
+    private IEnumerator UpdateInGameVolume(float _ingamevol)
+    {
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("settings").Child("ingamevolume").SetValueAsync(_ingamevol);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //InGame Vol are now updated
+            masterVolumeMixer.SetFloat("inGameVolume", _ingamevol);
+        }
+    }
+
+    private IEnumerator LoadLobbyData()
+    {
+        //Get the currently logged in user data
+        var DBTask = DBreference.Child("users").Child(user.UserId).GetValueAsync();
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else if (DBTask.Result.Value == null)
+        {
+            //No data exists yet
+            usernameLobbyField.text = user.DisplayName;
+            xpLobbyField.text = "1";
+        }
+        else
+        {
+            //Data has been retrieved
+            DataSnapshot snapshot = DBTask.Result;
+
+            usernameLobbyField.text = user.DisplayName;
+            xpLobbyField.text = snapshot.Child("xp").Value.ToString();
+        }
+        UIManager.instance.LobbyScreen();
+    }
+
+    private IEnumerator LoadProfileData()
+    {
+        //Get the currently logged in user data
+        var DBTask = DBreference.Child("users").Child(user.UserId).GetValueAsync();
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else if (DBTask.Result.Value == null)
+        {
+            //No data exists yet
+            usernameProfileField.text = user.DisplayName;
+            xpProfileField.text = "1";
+            killsProfileField.text = "0";
+            deathsProfileField.text = "0";
+            rateProfileField.text = "0.00";
+            winsProfileField.text = "0";
+            losesProfileField.text = "0";
+        }
+        else
+        {
+            //Data has been retrieved
+            DataSnapshot snapshot = DBTask.Result;
+
+            usernameProfileField.text = user.DisplayName;
+            xpProfileField.text = snapshot.Child("xp").Value.ToString();
+            killsProfileField.text = snapshot.Child("kills").Value.ToString();
+            deathsProfileField.text = snapshot.Child("deaths").Value.ToString();
+            rateProfileField.text = snapshot.Child("rate").Value.ToString();
+            winsProfileField.text = snapshot.Child("wins").Value.ToString();
+            losesProfileField.text = snapshot.Child("loses").Value.ToString();
+
+        }
+        UIManager.instance.ProfileScreen();
+    }
+
+    private IEnumerator LoadSettingsData()
+    {
+        //Get the currently logged in user data
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("settings").GetValueAsync();
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else if (DBTask.Result.Value == null)
+        {
+            //No data exists yet
+            graphicsSettingsText.text = "HIGH";
+            musicVolumeSettingsSlider.value = 0;
+            inGameVolumeSettingsSlider.value = 0;
+        }
+        else
+        {
+            //Data has been retrieved
+            DataSnapshot snapshot = DBTask.Result;
+
+            graphicsSettingsText.text = snapshot.Child("graphics").Value.ToString();
+            musicVolumeSettingsSlider.value = float.Parse(snapshot.Child("musicvolume").Value.ToString());
+            inGameVolumeSettingsSlider.value = float.Parse(snapshot.Child("ingamevolume").Value.ToString());
+
+        }
+        UIManager.instance.SettingsScreen();
+    }
+
+    private IEnumerator LoadScoreboardData()
+    {
+        //Get all the users data ordered by kills amount
+        var DBTask = DBreference.Child("users").OrderByChild("kills").GetValueAsync();
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Data has been retrieved
+            DataSnapshot snapshot = DBTask.Result;
+
+            //Destroy any existing scoreboard elements
+            foreach (Transform child in scoreboardContent.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            //Loop through every users UID
+            foreach (DataSnapshot childSnapshot in snapshot.Children.Reverse<DataSnapshot>())
+            {
+                string username = childSnapshot.Child("username").Value.ToString();
+                int kills = int.Parse(childSnapshot.Child("kills").Value.ToString());
+                int deaths = int.Parse(childSnapshot.Child("deaths").Value.ToString());
+                int xp = int.Parse(childSnapshot.Child("xp").Value.ToString());
+
+                //Instantiate new scoreboard elements
+                GameObject scoreboardElement = Instantiate(scoreElement, scoreboardContent);
+                scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, kills, deaths, xp);
+            }
+
+            //Go to scoareboard screen
+            UIManager.instance.ScoreboardScreen();
+        }
+    }
+    #endregion
+
+    #region Network Connection
+    private void OnEnable()
+    {
+        base.OnEnable();
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
+    private void OnDisable()
+    {
+        base.OnDisable();
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
+    public override void OnConnectedToMaster()
+    {
+        PhotonNetwork.JoinLobby(TypedLobby.Default);
+    }
+    public override void OnJoinedLobby()
+    {
+
+    }
+    public override void OnJoinedRoom()
+    {
+        int sizeOfPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
+        AssignTeam(sizeOfPlayers);
+        UIManager.instance.RoomScreen();
+
+        // PhotonNetwork.CurrentRoom.Players;
+        foreach (Player p in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+            if (p.NickName != PhotonNetwork.LocalPlayer.NickName)
+                AddPlayer(p.NickName);
+        }
+        AddPlayer(PhotonNetwork.LocalPlayer.NickName);
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            RoomStartBtnText.text = "Waiting for players...";
+        }
+        else
+        {
+            RoomStartBtnText.text = "Ready!";
+        }
+
+    }
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        UIManager.instance.LobbyScreen();
+    }
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        gameModel = gameController.gameModel;
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = (byte)gameModel.MaxPlayers;
+        //roomOptions.CustomRoomProperties["maxkills"] = 20;
+        PhotonNetwork.CreateRoom(gameModel.RoomName, roomOptions, TypedLobby.Default, null);
+    }
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        base.OnPlayerEnteredRoom(newPlayer);
+        AddPlayer(newPlayer.NickName);
+    }
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        base.OnPlayerLeftRoom(otherPlayer);
+        RemovePlayer(otherPlayer.NickName);
+    }
+    public void Onclick_CreateRoomMenuBtn()
+    {
+        UIManager.instance.CreateRoomScreen();
+    }
+    public void Onclick_JoinRoomMenuBtn()
+    {
+        UIManager.instance.JoinRoomScreen();
+    }
+    public void CreateRoomButton()
+    {
+        gameModel = gameController.gameModel;
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = (byte)gameModel.MaxPlayers;
+        //roomOptions.CustomRoomProperties.Add("maxkills",20);
+        PhotonNetwork.LocalPlayer.NickName = user.DisplayName;
+        PhotonNetwork.CreateRoom(gameModel.RoomName, roomOptions, TypedLobby.Default, null);
+    }
+    public void JoinRoomButton()
+    {
+        gameModel = gameController.gameModel;
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = (byte)gameModel.MaxPlayers;
+        //roomOptions.CustomRoomProperties["maxkills"] = 20;
+        PhotonNetwork.LocalPlayer.NickName = user.DisplayName;
+        PhotonNetwork.JoinOrCreateRoom(gameModel.RoomName, roomOptions, TypedLobby.Default, null);
+    }
+    public void PlayNowButton()
+    {
+        PhotonNetwork.LocalPlayer.NickName = user.DisplayName;
+
+        PhotonNetwork.JoinRandomRoom();
+
+    }
+    public void StartButton()
+    {
+        gameModel = gameController.gameModel;
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            SendMsg();
+            gameController.RoomStartButton.interactable = false;
+            RoomStartBtnText.text = "Wait...";
+            UIManager.instance.Invoke("ClearScreen", 2f);
+        }
+        else
+        {
+            if (count <= 4)
+            {
+                UIManager.instance.Invoke("ClearScreen", 2f);
+                PhotonNetwork.LoadLevel(gameModel.SceneNumber);
+
+            }
+        }
+    }
+    public void CancelButton()
+    {
+        UIManager.instance.LobbyScreen();
+    }
+    public void LeaveRoomButton()
+    {
+        RemovePlayer(PhotonNetwork.LocalPlayer.NickName);
+        PhotonNetwork.LeaveRoom();
+        Destroy(GameObject.FindGameObjectWithTag("GameCanvas"));
+        StartCoroutine(LoadLobbyData());
+    }
+    public void Map1Button()
+    {
+        roomImage.sprite = map1Image;
+    }
+    public void Map2Button()
+    {
+        roomImage.sprite = map2Image;
+    }
+    public void Map3Button()
+    {
+        roomImage.sprite = map3Image;
+    }
+    void AssignTeam(int sizeOfPlayer)
+    {
+        ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
+        if (sizeOfPlayer % 2 == 0)
+        {
+            hash.Add("Team", 1);
+        }
+        else
+        {
+            hash.Add("Team", 2);
+        }
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+    }
+
+    public void AddPlayer(string playerName)
+    {
+        GameObject PaP = Instantiate(playerAvatarPrefab, Vector3.zero, Quaternion.identity);
+        PaP.transform.GetChild(0).GetComponent<Text>().text = playerName;
+        PaP.transform.parent = playersContainer.transform;
+        PaP.transform.localScale = Vector3.one;
+        PaP.name = playerName;
+    }
+    public void RemovePlayer(string playerName)
+    {
+        int PaPCount = playersContainer.transform.childCount;
+        for (int i = 0; i < PaPCount; i++)
+        {
+            if (playersContainer.transform.GetChild(i).name == playerName)
+            {
+                Destroy(playersContainer.transform.GetChild(i).gameObject);
+                return;
+            }
+        }
+    }
+    #endregion
+    #region Raise_Events
+    enum EventCodes
+    {
+        chatmessage = 0,
+        ready = 1
+    }
+
+    int count = 1;
+    public void OnEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+        object content = photonEvent.CustomData;
+        EventCodes code = (EventCodes)eventCode;
+
+        if (code == EventCodes.ready)
+        {
+            object[] datas = content as object[];
+            if (PhotonNetwork.IsMasterClient)
+            {
+                count++;
+                if (count >= 2)
+                    RoomStartBtnText.text = "START!";
+                else
+                    RoomStartBtnText.text = "Only " + count + "/ 4 players are Ready.";
+            }
+        }
+        if (code == EventCodes.chatmessage)
+        {
+            object[] datas = content as object[];
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject p in players)
+            {
+                p.GetComponent<PlayerView>().chatMessage.text= (string)datas[0];
+            }
+        }
+    }
+
+    public void SendMsg()
+    {
+        string message = PhotonNetwork.LocalPlayer.ActorNumber.ToString();
+        object[] datas = new object[] { message };
+        RaiseEventOptions options = new RaiseEventOptions
+        {
+            CachingOption = EventCaching.DoNotCache,
+            Receivers = ReceiverGroup.MasterClient
+        };
+        SendOptions sendOptions = new SendOptions();
+        sendOptions.Reliability = true;
+
+        PhotonNetwork.RaiseEvent((byte)EventCodes.ready, datas, options, sendOptions);
+    }
+    public void SendMsg(string message)
+    {
+        object[] datas = new object[] { message };
+        RaiseEventOptions options = new RaiseEventOptions
+        {
+            CachingOption = EventCaching.DoNotCache,
+            Receivers = ReceiverGroup.All
+        };
+        SendOptions sendOptions = new SendOptions();
+        sendOptions.Reliability = true;
+        PhotonNetwork.RaiseEvent((byte)EventCodes.chatmessage, datas, options, sendOptions);
+    }
+    #endregion
+}
+
+

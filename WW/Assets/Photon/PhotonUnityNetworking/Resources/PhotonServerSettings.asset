@@ -13,32 +13,26 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: e584c217-8698-4f72-bae2-3378f5422e2f
+    AppIdRealtime: bcf7762a-a189-482b-adeb-9b7fe75a18f1
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: eu
+    FixedRegion: 
     Server: 
     Port: 0
+    ProxyServer: 
     Protocol: 0
+    EnableProtocolFallback: 1
+    AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  StartInOfflineMode: 0
+  DevRegion: 
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
-  RpcList:
-  - DestroySpaceship
-  - Fire
-  - RespawnSpaceship
-  - Shoot
-  - Explode
-  - GetDamage
-  - TeamCountUpdate
-  - HideplayerMesh
-  - Hideplayer
-  - Slide
-  - Crouch
+  StartInOfflineMode: 0
+  RpcList: []
   DisableAutoOpenWizard: 1
-  ShowSettings: 1
+  ShowSettings: 0
+  DevRegionSetOnce: 0

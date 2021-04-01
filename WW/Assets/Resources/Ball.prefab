@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 349479023944904213}
   - component: {fileID: 4291394162674411398}
   - component: {fileID: 5976285177619062684}
-  - component: {fileID: 7194377003993920183}
-  - component: {fileID: -7158424325127992897}
-  - component: {fileID: -8556430338234738414}
+  - component: {fileID: 4169591885889656388}
+  - component: {fileID: 3431480246862785965}
+  - component: {fileID: 3624764405073547281}
+  - component: {fileID: 3990589926772318434}
   m_Layer: 8
   m_Name: Ball
   m_TagString: Bullet
@@ -32,7 +33,7 @@ Transform:
   m_GameObject: {fileID: 6096811058807987435}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -612.83, y: 24.684, z: 3.648}
-  m_LocalScale: {x: 63.43113, y: 63.43111, z: 63.431152}
+  m_LocalScale: {x: 64.25156, y: 64.25154, z: 64.25158}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -110,39 +111,12 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &7194377003993920183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6096811058807987435}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16baa434abd3166479be9ff340392fa7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 5976285177619062684}
-  explosion: {fileID: 9185292854026860986, guid: 2a7e94ec16508d34a9b52b74c1ffa386,
-    type: 3}
-  whatIsEnemies:
-    serializedVersion: 2
-    m_Bits: 0
-  bounciness: 0
-  useGravity: 1
-  explosionDamage: 40
-  explosionRange: 3
-  explosionFroce: 0
-  maxCollisions: 1
-  maxLifetime: 2
-  explodeOnTouch: 1
-  kill: 0
---- !u!114 &-7158424325127992897
+--- !u!114 &4169591885889656388
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -159,12 +133,14 @@ MonoBehaviour:
   prefixField: -1
   Synchronization: 3
   OwnershipTransfer: 0
+  observableSearch: 2
   ObservedComponents:
-  - {fileID: -8556430338234738414}
-  viewIdField: 0
-  InstantiationId: 1
+  - {fileID: 3431480246862785965}
+  - {fileID: 3624764405073547281}
+  sceneViewId: 2
+  InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &-8556430338234738414
+--- !u!114 &3431480246862785965
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,3 +155,42 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
+  m_UseLocal: 1
+--- !u!114 &3624764405073547281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6096811058807987435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 902938b19d2f67e4d9f99a75c9e00f0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3990589926772318434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6096811058807987435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 297f56d4ec92c874e8f58c9f7e6bef6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 5976285177619062684}
+  explosion: {fileID: 0}
+  whatIsEnemies:
+    serializedVersion: 2
+    m_Bits: 0
+  bounciness: 0
+  useGravity: 1
+  explosionDamage: 0
+  explosionRange: 0
+  explosionFroce: 0
+  maxCollisions: 1
+  maxLifetime: 5
+  explodeOnTouch: 1
+  kill: 0
