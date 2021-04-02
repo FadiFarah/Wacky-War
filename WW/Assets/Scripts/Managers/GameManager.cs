@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviourPun
 {
     public Camera sceneCam;
     //public GameObject player;
-    //public Transform playerSpawnPosition;
+    public Transform playerSpawnPosition;
     //public Text pingRateText;
     public float matchTime;
     public TMP_Text timeRemainTxt;
@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviourPun
         sceneCam.enabled = false;
         maxkills = 4;
         //PhotonNetwork.Instantiate(player.name, playerSpawnPosition.position, playerSpawnPosition.rotation);
-        PhotonNetwork.Instantiate("Player", Vector3.one, Quaternion.identity);
+        PhotonNetwork.Instantiate("Player", playerSpawnPosition.position, playerSpawnPosition.rotation);
         StartCoroutine(EndMatch());
     }
 
@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviourPun
     }
     private IEnumerator EndMatch()
     {
-        float matchTime = 10f;
+        float matchTime = 300;
         while (matchTime > 0.0f)
         {
             yield return new WaitForEndOfFrame();

@@ -106,7 +106,7 @@ public class SnowballController : MonoBehaviour
     }
     public void Reload()
     {
-        if (playerPhotonView.IsMine)
+        if (playerPhotonView.IsMine && snowballModel.reloading==false && snowballModel.bulletsLeft<10)
         {
             snowballView.Reload();
             snowballModel.reloading = true;
@@ -119,7 +119,8 @@ public class SnowballController : MonoBehaviour
         if(playerPhotonView.IsMine)
         { 
             snowballView.ReloadFinished();
-            snowballModel.bulletsLeft = snowballModel.magazineSize;
+            snowballModel.bulletsLeft = 10;
+            snowballModel.magazineSize--;
             snowballModel.reloading = false;
             snowballModel.shooting = false;
         }

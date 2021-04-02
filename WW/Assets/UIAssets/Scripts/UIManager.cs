@@ -19,6 +19,7 @@ public class UIManager : MonoBehaviour
     public GameObject createroomUI;
     public GameObject roomUI;
     public GameObject forgotpassUI;
+    public Animator UIAnimator;
 
 
     private void Awake()
@@ -53,17 +54,17 @@ public class UIManager : MonoBehaviour
     public void LoginScreen()
     {
         ClearScreen();
-        loginUI.SetActive(true);
+        StartCoroutine(ActivateTransition(loginUI));
     }
     public void RegisterScreen() 
     {
         ClearScreen();
-        registerUI.SetActive(true);
+        StartCoroutine(ActivateTransition(registerUI));
     }
     public void LobbyScreen() 
     {
         ClearScreen();
-        lobbyUI.SetActive(true);
+        StartCoroutine(ActivateTransition(lobbyUI));
     }
     public void ProfileScreen() 
     {
@@ -79,31 +80,39 @@ public class UIManager : MonoBehaviour
     public void ScoreboardScreen() 
     {
         ClearScreen();
-        scoreboardUI.SetActive(true);
+        StartCoroutine(ActivateTransition(scoreboardUI));
     }
     public void JoinRoomScreen() 
     {
         ClearScreen();
-        joinroomUI.SetActive(true);
+        StartCoroutine(ActivateTransition(joinroomUI));
     }
     public void CreateRoomScreen() 
     {
         ClearScreen();
-        createroomUI.SetActive(true);
+        StartCoroutine(ActivateTransition(createroomUI));
     }
     public void SettingsScreen()
     {
         ClearScreen();
-        settingsUI.SetActive(true);
+        StartCoroutine(ActivateTransition(settingsUI));
     }
     public void RoomScreen() 
     {
         ClearScreen();
-        roomUI.SetActive(true);
+        StartCoroutine(ActivateTransition(roomUI));
     }
     public void ForgotPassScreen()
     {
         ClearScreen();
-        forgotpassUI.SetActive(true);
+        StartCoroutine(ActivateTransition(forgotpassUI));
+    }
+    public IEnumerator ActivateTransition(GameObject bar)
+    {
+        UIAnimator.SetTrigger("Start");
+
+        yield return new WaitForSeconds(0.4f);
+        UIAnimator.SetTrigger("End");
+        bar.SetActive(true);
     }
 }

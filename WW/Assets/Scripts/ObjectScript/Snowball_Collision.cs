@@ -36,7 +36,6 @@ public class Snowball_Collision : MonoBehaviourPun
     {
         Setup();
         target = GetLocalPlayer();
-        //fb = GameObject.Find("FirebaseManager").GetComponent<FirebaseManager>();
 
     }
     private void Update()
@@ -76,6 +75,7 @@ public class Snowball_Collision : MonoBehaviourPun
         //string id = fb.user.UserId;
         //Don't count collisions with other bullets
         if (collision.collider.CompareTag("Bullet")) return;
+        if (collision.transform.GetComponent<PhotonView>()!=null && collision.transform.GetComponent<PhotonView>().IsMine) return;
         if (collision.transform.tag == "Player" && !collision.transform.GetComponent<PhotonView>().IsMine && !collision.transform.IsChildOf(target.transform))
         {
             PlayerController player = collision.gameObject.GetComponent<PlayerController>();
@@ -98,6 +98,7 @@ public class Snowball_Collision : MonoBehaviourPun
     private void Delay()
     {
         Destroy(gameObject);
+        //GameObject.FindGameObjectWithTag("SnowParticle").GetComponent<Explode>().Invoke("DestroyParticle",1);
     }
      private void Setup()
     {

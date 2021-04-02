@@ -37,6 +37,7 @@ public class GameView : MonoBehaviourPunCallbacks
     [Header("Lobby")]
     public TMP_InputField usernameLobbyField;
     public TMP_InputField levelLobbyField;
+    public Image expLobbyFillImage;
     public GameObject scoreElement;
     public Transform scoreboardContent;
 
@@ -213,8 +214,6 @@ public class GameView : MonoBehaviourPunCallbacks
 
             yield return new WaitForSeconds(2);
 
-
-            UIManager.instance.LobbyScreen();
 
             confirmLoginText.text = "";
             gameController.ClearLoginFields();
@@ -691,6 +690,7 @@ public class GameView : MonoBehaviourPunCallbacks
             //No data exists yet
             usernameLobbyField.text = user.DisplayName;
             levelLobbyField.text = "1";
+            expLobbyFillImage.fillAmount = 0;
         }
         else
         {
@@ -698,7 +698,13 @@ public class GameView : MonoBehaviourPunCallbacks
             DataSnapshot snapshot = DBTask.Result;
 
             usernameLobbyField.text = user.DisplayName;
-            levelLobbyField.text = snapshot.Child("level").Value.ToString();
+            double currentlevel = double.Parse(snapshot.Child("level").Value.ToString());
+            levelLobbyField.text = currentlevel.ToString();
+            double currentexp= double.Parse(snapshot.Child("exp").Value.ToString());
+            double exptoreach = Math.Pow(currentlevel,2)*100;
+            double startexp = Math.Pow(currentlevel - 1, 2) * 100;
+            double difference = exptoreach - startexp;
+            expLobbyFillImage.fillAmount = ( (float)currentexp - (float)startexp ) / (float)difference; 
         }
         UIManager.instance.LobbyScreen();
     }

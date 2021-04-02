@@ -41,7 +41,7 @@ public class SnowballView : MonoBehaviourPun
             // shootSound.Play();
         }
             //Find the exact hit position using a raycast
-            Ray ray = camera.ViewportPointToRay(new Vector3(0.5f, 0.6f, 0));
+            Ray ray = camera.ViewportPointToRay(new Vector3(0.5f, 0.6f, 0)); 
             RaycastHit hit;
             playerView.transform.rotation = new Quaternion(0, Camera.main.transform.rotation.y, 0, Camera.main.transform.rotation.w);
             //attackPoint.transform.eulerAngles = new Vector3(ray.direction.x, fpscam.transform.eulerAngles.y, ray.direction.z);
