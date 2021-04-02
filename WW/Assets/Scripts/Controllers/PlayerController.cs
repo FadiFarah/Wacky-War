@@ -154,6 +154,6 @@ public class PlayerController:MonoBehaviourPun
     }
     public void ContinueButton()
     {
-        gameView.LeaveRoomButton();
+        gameView.LeaveOrContinueButton();
     }
 }

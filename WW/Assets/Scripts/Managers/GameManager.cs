@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviourPun
     }
     private IEnumerator EndMatch()
     {
-        float matchTime = 15f;
+        float matchTime = 10f;
         while (matchTime > 0.0f)
         {
             yield return new WaitForEndOfFrame();

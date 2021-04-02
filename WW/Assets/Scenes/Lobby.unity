@@ -2859,7 +2859,7 @@ GameObject:
   - component: {fileID: 209886809}
   - component: {fileID: 209886808}
   m_Layer: 0
-  m_Name: XP_Input
+  m_Name: Level_Input
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3889,7 +3889,7 @@ GameObject:
   - component: {fileID: 316196396}
   - component: {fileID: 316196395}
   m_Layer: 0
-  m_Name: XP_IMG
+  m_Name: Level_IMG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5979,7 +5979,7 @@ GameObject:
   - component: {fileID: 445341815}
   - component: {fileID: 445341814}
   m_Layer: 0
-  m_Name: XP_IMG
+  m_Name: Level_IMG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21949,11 +21949,11 @@ MonoBehaviour:
   warningRegisterText: {fileID: 555951527}
   confirmForgotPassText: {fileID: 1325906910}
   usernameLobbyField: {fileID: 516466300}
-  xpLobbyField: {fileID: 1778969173}
+  levelLobbyField: {fileID: 1778969173}
   scoreElement: {fileID: 1879445940651037232, guid: 829cd42e5df49e047a3a4afb1ba6859d, type: 3}
   scoreboardContent: {fileID: 1420325820}
   usernameProfileField: {fileID: 97571703}
-  xpProfileField: {fileID: 209886808}
+  levelProfileField: {fileID: 209886808}
   killsProfileField: {fileID: 1430778117}
   deathsProfileField: {fileID: 1461961443}
   rateProfileField: {fileID: 1530693572}
@@ -28566,7 +28566,7 @@ GameObject:
   - component: {fileID: 1778969171}
   - component: {fileID: 1778969173}
   m_Layer: 0
-  m_Name: XP_Input
+  m_Name: Level_Input
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29534,7 +29534,7 @@ GameObject:
   - component: {fileID: 1849775015}
   - component: {fileID: 1849775014}
   m_Layer: 0
-  m_Name: XP
+  m_Name: Level
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29741,7 +29741,7 @@ GameObject:
   - component: {fileID: 1874490190}
   - component: {fileID: 1874490189}
   m_Layer: 0
-  m_Name: XP
+  m_Name: Level
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

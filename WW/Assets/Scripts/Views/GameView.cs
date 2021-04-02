@@ -36,14 +36,14 @@ public class GameView : MonoBehaviourPunCallbacks
     //Lobby variables
     [Header("Lobby")]
     public TMP_InputField usernameLobbyField;
-    public TMP_InputField xpLobbyField;
+    public TMP_InputField levelLobbyField;
     public GameObject scoreElement;
     public Transform scoreboardContent;
 
     //Profile variables
     [Header("Profile")]
     public TMP_InputField usernameProfileField;
-    public TMP_InputField xpProfileField;
+    public TMP_InputField levelProfileField;
     public TMP_InputField killsProfileField;
     public TMP_InputField deathsProfileField;
     public TMP_InputField rateProfileField;
@@ -69,6 +69,8 @@ public class GameView : MonoBehaviourPunCallbacks
     public Sprite map3Image;
     public GameObject playersContainer;
     public GameObject playerAvatarPrefab;
+
+    bool startedgame = false;
 
     void Awake()
     {
@@ -299,11 +301,14 @@ public class GameView : MonoBehaviourPunCallbacks
                         StartCoroutine(UpdateUsernameDatabase(_username));
                         StartCoroutine(UpdateDeaths(0));
                         StartCoroutine(UpdateKills(0));
-                        StartCoroutine(UpdateXp(1));
+                        StartCoroutine(UpdateExp(0));
+                        StartCoroutine(UpdateLevel(1));
                         StartCoroutine(UpdateWins(0));
                         StartCoroutine(UpdateLoses(0));
                         StartCoroutine(UpdateRate(0, 0));
-
+                        StartCoroutine(UpdateInGameVolume(0));
+                        StartCoroutine(UpdateMusicVolume(0));
+                        StartCoroutine(UpdateGraphics("HIGH"));
                     }
                 }
             }
@@ -380,23 +385,6 @@ public class GameView : MonoBehaviourPunCallbacks
     }
 
 
-    private IEnumerator UpdateXp(int _xp)
-    {
-        //Set the currently logged in user xp
-        var DBTask = DBreference.Child("users").Child(user.UserId).Child("xp").SetValueAsync(_xp);
-
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            //Xp is now updated
-        }
-    }
-
     public IEnumerator GetKills()
     {
         //Get the currently logged in user data
@@ -413,9 +401,18 @@ public class GameView : MonoBehaviourPunCallbacks
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
 
-            string currentkills = snapshot.Child("kills").Value.ToString();
-            int kills = Convert.ToInt32(currentkills) + 1;
-            StartCoroutine(UpdateKills(kills));
+            int currentkills = int.Parse(snapshot.Child("kills").Value.ToString())+1;
+            int currentdeaths = int.Parse(snapshot.Child("deaths").Value.ToString());
+            int currentexp = int.Parse(snapshot.Child("exp").Value.ToString())+50;
+            int currentlevel = int.Parse(snapshot.Child("level").Value.ToString());
+            if (currentexp >= (Math.Pow(currentlevel, 2) * 100))
+            {
+                currentlevel++;
+                StartCoroutine(UpdateLevel(currentlevel));
+            }
+            StartCoroutine(UpdateKills(currentkills));
+            StartCoroutine(UpdateExp(currentexp));
+            StartCoroutine(UpdateRate(currentkills, currentdeaths));
 
         }
     }
@@ -435,9 +432,10 @@ public class GameView : MonoBehaviourPunCallbacks
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
 
-            string currentdeaths = snapshot.Child("deaths").Value.ToString();
-            int deaths = Convert.ToInt32(currentdeaths) + 1;
-            StartCoroutine(UpdateDeaths(deaths));
+            int currentdeaths = int.Parse(snapshot.Child("deaths").Value.ToString())+1;
+            int currentkills = int.Parse(snapshot.Child("kills").Value.ToString());
+            StartCoroutine(UpdateDeaths(currentdeaths));
+            StartCoroutine(UpdateRate(currentkills, currentdeaths));
 
         }
     }
@@ -454,9 +452,8 @@ public class GameView : MonoBehaviourPunCallbacks
         else
         {
             DataSnapshot snapshot = DBTask.Result;
-            string currentwins = snapshot.Child("wins").Value.ToString();
-            int wins = Convert.ToInt32(currentwins) + 1;
-            StartCoroutine(UpdateWins(wins));
+            int currentwins = int.Parse(snapshot.Child("wins").Value.ToString())+1;
+            StartCoroutine(UpdateWins(currentwins));
         }
     }
 
@@ -473,27 +470,8 @@ public class GameView : MonoBehaviourPunCallbacks
         else
         {
             DataSnapshot snapshot = DBTask.Result;
-            string currentloses = snapshot.Child("loses").Value.ToString();
-            int loses = Convert.ToInt32(currentloses) + 1;
-            StartCoroutine(UpdateLoses(loses));
-        }
-    }
-    public IEnumerator GetRate()
-    {
-        var DBTask = DBreference.Child("users").Child(user.UserId).GetValueAsync();
-
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            DataSnapshot snapshot = DBTask.Result;
-            int currentkills = Convert.ToInt32(snapshot.Child("kills").Value.ToString());
-            int currentdeaths = Convert.ToInt32(snapshot.Child("deaths").Value.ToString());
-            StartCoroutine(UpdateRate(currentkills, currentdeaths));
+            int currentloses =int.Parse(snapshot.Child("loses").Value.ToString())+1;
+            StartCoroutine(UpdateLoses(currentloses));
         }
     }
     public IEnumerator GetSettings()
@@ -518,6 +496,38 @@ public class GameView : MonoBehaviourPunCallbacks
             yield return new WaitForSeconds(2);
         }
     }
+    private IEnumerator UpdateExp(int _exp)
+    {
+        //Set the currently logged in user xp
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("exp").SetValueAsync(_exp);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //exp is now updated
+        }
+    }
+    private IEnumerator UpdateLevel(int _level)
+    {
+        //Set the currently logged in user xp
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("level").SetValueAsync(_level);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //level is now updated
+        }
+    }
     private IEnumerator UpdateKills(int _kills)
     {
         //Set the currently logged in user kills
@@ -533,8 +543,6 @@ public class GameView : MonoBehaviourPunCallbacks
         else
         {
             //Kills are now updated
-
-            StartCoroutine(GetRate());
         }
     }
 
@@ -552,8 +560,6 @@ public class GameView : MonoBehaviourPunCallbacks
         else
         {
             //Deaths are now updated
-            StartCoroutine(GetRate());
-
         }
     }
     private IEnumerator UpdateWins(int _wins)
@@ -591,8 +597,8 @@ public class GameView : MonoBehaviourPunCallbacks
     {
         if (_deaths == 0)
             _deaths = 1;
-        float num = (float)_kills / (float)_deaths;
-        var DBTask = DBreference.Child("users").Child(user.UserId).Child("rate").SetValueAsync(num);
+        float _rate = (float)_kills / (float)_deaths;
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("rate").SetValueAsync(_rate);
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
         if (DBTask.Exception != null)
@@ -684,7 +690,7 @@ public class GameView : MonoBehaviourPunCallbacks
         {
             //No data exists yet
             usernameLobbyField.text = user.DisplayName;
-            xpLobbyField.text = "1";
+            levelLobbyField.text = "1";
         }
         else
         {
@@ -692,7 +698,7 @@ public class GameView : MonoBehaviourPunCallbacks
             DataSnapshot snapshot = DBTask.Result;
 
             usernameLobbyField.text = user.DisplayName;
-            xpLobbyField.text = snapshot.Child("xp").Value.ToString();
+            levelLobbyField.text = snapshot.Child("level").Value.ToString();
         }
         UIManager.instance.LobbyScreen();
     }
@@ -712,7 +718,7 @@ public class GameView : MonoBehaviourPunCallbacks
         {
             //No data exists yet
             usernameProfileField.text = user.DisplayName;
-            xpProfileField.text = "1";
+            levelProfileField.text = "1";
             killsProfileField.text = "0";
             deathsProfileField.text = "0";
             rateProfileField.text = "0.00";
@@ -725,7 +731,7 @@ public class GameView : MonoBehaviourPunCallbacks
             DataSnapshot snapshot = DBTask.Result;
 
             usernameProfileField.text = user.DisplayName;
-            xpProfileField.text = snapshot.Child("xp").Value.ToString();
+            levelProfileField.text = snapshot.Child("level").Value.ToString();
             killsProfileField.text = snapshot.Child("kills").Value.ToString();
             deathsProfileField.text = snapshot.Child("deaths").Value.ToString();
             rateProfileField.text = snapshot.Child("rate").Value.ToString();
@@ -795,11 +801,11 @@ public class GameView : MonoBehaviourPunCallbacks
                 string username = childSnapshot.Child("username").Value.ToString();
                 int kills = int.Parse(childSnapshot.Child("kills").Value.ToString());
                 int deaths = int.Parse(childSnapshot.Child("deaths").Value.ToString());
-                int xp = int.Parse(childSnapshot.Child("xp").Value.ToString());
+                int level = int.Parse(childSnapshot.Child("level").Value.ToString());
 
                 //Instantiate new scoreboard elements
                 GameObject scoreboardElement = Instantiate(scoreElement, scoreboardContent);
-                scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, kills, deaths, xp);
+                scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, kills, deaths, level);
             }
 
             //Go to scoareboard screen
@@ -821,11 +827,11 @@ public class GameView : MonoBehaviourPunCallbacks
     }
     public override void OnConnectedToMaster()
     {
-        PhotonNetwork.JoinLobby(TypedLobby.Default);
+        //PhotonNetwork.JoinLobby(TypedLobby.Default);
     }
     public override void OnJoinedLobby()
     {
-
+        PhotonNetwork.ConnectUsingSettings();
     }
     public override void OnJoinedRoom()
     {
@@ -853,7 +859,7 @@ public class GameView : MonoBehaviourPunCallbacks
     }
     public override void OnDisconnected(DisconnectCause cause)
     {
-        UIManager.instance.LobbyScreen();
+        PhotonNetwork.JoinLobby();
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
@@ -867,6 +873,12 @@ public class GameView : MonoBehaviourPunCallbacks
     {
         base.OnPlayerEnteredRoom(newPlayer);
         AddPlayer(newPlayer.NickName);
+    }
+    public override void OnLeftRoom()
+    {
+        if(startedgame)
+            PhotonNetwork.LoadLevel(2);
+        StartCoroutine(LoadLobbyData());
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
@@ -908,23 +920,24 @@ public class GameView : MonoBehaviourPunCallbacks
     }
     public void StartButton()
     {
-        gameModel = gameController.gameModel;
         if (!PhotonNetwork.IsMasterClient)
         {
-            SendMsg();
+            gameModel = gameController.gameModel;
+            SendMsg(EventCodes.ready);
             gameController.RoomStartButton.interactable = false;
             RoomStartBtnText.text = "Wait...";
-            UIManager.instance.Invoke("ClearScreen", 2f);
         }
         else
         {
             if (count <= 4)
             {
-                UIManager.instance.Invoke("ClearScreen", 2f);
+                gameModel = gameController.gameModel;
+                SendMsg(EventCodes.start);
                 PhotonNetwork.LoadLevel(gameModel.SceneNumber);
 
             }
         }
+        
     }
     public void CancelButton()
     {
@@ -932,10 +945,36 @@ public class GameView : MonoBehaviourPunCallbacks
     }
     public void LeaveRoomButton()
     {
-        RemovePlayer(PhotonNetwork.LocalPlayer.NickName);
+        //RemovePlayer(PhotonNetwork.LocalPlayer.NickName);
+        startedgame = false;
         PhotonNetwork.LeaveRoom();
-        Destroy(GameObject.FindGameObjectWithTag("GameCanvas"));
+        foreach (Player p in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+            RemovePlayer(p.NickName);
+        }
         StartCoroutine(LoadLobbyData());
+    }
+    public void LeaveOrContinueButton()
+    {
+        //RemovePlayer(PhotonNetwork.LocalPlayer.NickName);
+        startedgame = true;
+        PhotonNetwork.LeaveRoom();
+        gameController.RoomStartButton.interactable = true;
+        count = 1;
+        foreach (Player p in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+            RemovePlayer(p.NickName);
+        }
+
+        /*count = 1;
+        gameController.RoomStartButton.interactable = true;
+        foreach (Player p in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+                RemovePlayer(p.NickName);
+        }
+        
+        Destroy(GameObject.FindGameObjectWithTag("GameCanvas"));
+        StartCoroutine(LoadLobbyData());*/
     }
     public void Map1Button()
     {
@@ -985,10 +1024,11 @@ public class GameView : MonoBehaviourPunCallbacks
     }
     #endregion
     #region Raise_Events
-    enum EventCodes
+    public enum EventCodes
     {
         chatmessage = 0,
-        ready = 1
+        ready = 1,
+        start=2
     }
 
     int count = 1;
@@ -1019,21 +1059,36 @@ public class GameView : MonoBehaviourPunCallbacks
                 p.GetComponent<PlayerView>().chatMessage.text= (string)datas[0];
             }
         }
+        if (code == EventCodes.start)
+        {
+            UIManager.instance.ClearScreen();
+        }
     }
 
-    public void SendMsg()
+    public void SendMsg(EventCodes eventcode)
     {
+        RaiseEventOptions options;
         string message = PhotonNetwork.LocalPlayer.ActorNumber.ToString();
         object[] datas = new object[] { message };
-        RaiseEventOptions options = new RaiseEventOptions
+        if (eventcode == EventCodes.ready)
         {
-            CachingOption = EventCaching.DoNotCache,
-            Receivers = ReceiverGroup.MasterClient
-        };
+            options = new RaiseEventOptions
+            {
+                CachingOption = EventCaching.DoNotCache,
+                Receivers = ReceiverGroup.MasterClient
+            };
+        }
+        else
+        {
+            options = new RaiseEventOptions
+            {
+                CachingOption = EventCaching.DoNotCache,
+                Receivers = ReceiverGroup.All
+            };
+        }
         SendOptions sendOptions = new SendOptions();
         sendOptions.Reliability = true;
-
-        PhotonNetwork.RaiseEvent((byte)EventCodes.ready, datas, options, sendOptions);
+        PhotonNetwork.RaiseEvent((byte)eventcode, datas, options, sendOptions);
     }
     public void SendMsg(string message)
     {
