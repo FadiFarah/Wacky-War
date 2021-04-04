@@ -19,6 +19,7 @@ public class UIManager : MonoBehaviour
     public GameObject createroomUI;
     public GameObject roomUI;
     public GameObject forgotpassUI;
+    public GameObject avatarsUI;
     public Animator UIAnimator;
 
 
@@ -49,6 +50,7 @@ public class UIManager : MonoBehaviour
         roomUI.SetActive(false);
         forgotpassUI.SetActive(false);
         settingsUI.SetActive(false);
+        avatarsUI.SetActive(false);
     }
 
     public void LoginScreen()
@@ -106,6 +108,11 @@ public class UIManager : MonoBehaviour
     {
         ClearScreen();
         StartCoroutine(ActivateTransition(forgotpassUI));
+    }
+    public void AvatarsScreen()
+    {
+        ClearScreen();
+        StartCoroutine(ActivateTransition(avatarsUI));
     }
     public IEnumerator ActivateTransition(GameObject bar)
     {

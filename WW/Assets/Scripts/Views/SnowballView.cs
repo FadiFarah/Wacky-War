@@ -26,7 +26,6 @@ public class SnowballView : MonoBehaviourPun
         if(playerPhotonView.IsMine)
         {
             snowballModel = GetComponent<SnowballController>().snowballModel;
-            playerView = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerView>();
             anim = playerView.GetComponent<Animator>();
         }
     }

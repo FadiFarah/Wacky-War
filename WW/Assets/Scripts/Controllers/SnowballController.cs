@@ -50,14 +50,12 @@ public class SnowballController : MonoBehaviour
     {
         if (playerPhotonView.IsMine)
         {
-            if (snowballModel.readyToShoot && snowballModel.shooting && !snowballModel.reloading && snowballModel.bulletsLeft <= 0) Reload();
-
             //Shooting
             if (snowballModel.readyToShoot && snowballModel.shooting && !snowballModel.reloading && snowballModel.bulletsLeft > 0)
             {
                 //Set bullets shot to 0
                 snowballModel.bulletsShot = 0;
-                Shoot();
+                //Shoot();
             }
         }
     }

@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class CameraModel
 {
-    public float posX { get; set; }
-    public float posY { get; set; }
-    public float posZ { get; set; }
-    public float rotX { get; set; }
-    public float rotY { get; set; }
-    public float rotZ { get; set; }
+    public float posX = 0;
+    public float posY =0;
+    public float posZ =0;
+    public float rotX =0;
+    public float rotY = 0;
+    public float rotZ = 0;
     public float distanceFromTarget = 40;
     public float RotationSensitivity = 1f;
     public float rotationSmoothTime = 400f;

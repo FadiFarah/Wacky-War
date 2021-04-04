@@ -13,6 +13,11 @@ public class PlayerController:MonoBehaviourPun
     FixedJoystick joystick;
     private CharacterController characterController;
 
+    [Header("Settings")]
+    public TMP_Text graphicsSettingsText;
+    public Slider musicVolumeSettingsSlider;
+    public Slider inGameVolumeSettingsSlider;
+
     GameView gameView;
 
     private void Start()
@@ -27,7 +32,7 @@ public class PlayerController:MonoBehaviourPun
             characterController = GetComponent<CharacterController>();
         }
         gameView = GameObject.Find("GameMVC").GetComponent<GameView>();
-
+        
     }
     private void Update()
     {
@@ -152,8 +157,30 @@ public class PlayerController:MonoBehaviourPun
     {
         gameView.SendMsg(gameView.user.DisplayName+": "+ msg);
     }
+    public void PauseButton()
+    {
+        if (photonView.IsMine)
+        {
+            playerView.PauseButton();
+            PlayerController playercontroller = GetComponent<PlayerController>();
+            gameView.PauseMenuDataButton(playercontroller);
+        }
+    }
+    public void PlayButton()
+    {
+        if (photonView.IsMine)
+            playerView.PlayButton();
+    }
     public void ContinueButton()
     {
         gameView.LeaveOrContinueButton();
     }
+    public void SaveChangesButton()
+    {
+        GameModel gameModel = new GameModel();
+        GameObject.Find("GameMVC").GetComponent<GameController>().gameModel=gameModel;
+        gameModel.OnSaveSettings(graphicsSettingsText.text, inGameVolumeSettingsSlider.value, musicVolumeSettingsSlider.value);
+        gameView.SaveSettingsButton();
+    }
+
 }

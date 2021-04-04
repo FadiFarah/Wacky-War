@@ -30,9 +30,13 @@ public class PlayerView:MonoBehaviourPun
     public GameObject victoryImage;
     public GameObject defeatImage;
 
+    public GameObject pauseBar;
+    public GameObject pauseMenuBar;
+
     public GameObject chatSystemBar;
     public GameObject chatMessages;
     public Text chatMessage;
+
     float currentVelocity;
 
     void Start()
@@ -50,6 +54,7 @@ public class PlayerView:MonoBehaviourPun
             youKillsBar.SetActive(true);
             mostKillsBar.SetActive(true);
             chatSystemBar.SetActive(true);
+            pauseBar.SetActive(true);
             GameObject.Find("Jump_Btn").GetComponent<FixedJumpButton>().SetPlayer(this);
             GameObject.Find("Crouch_Btn").GetComponent<FixedCrouchButton>().SetPlayer(this);
             GameObject.Find("Slide_Btn").GetComponent<FixedSlideButton>().SetPlayer(this);
@@ -157,5 +162,21 @@ public class PlayerView:MonoBehaviourPun
                 chatMessages.SetActive(false);
 
         }
+    }
+    public void PauseButton()
+    {
+        Animator animator = pauseMenuBar.GetComponent<Animator>();
+        CanvasGroup canvasgroup = pauseMenuBar.GetComponent<CanvasGroup>();
+        canvasgroup.interactable = true;
+        canvasgroup.blocksRaycasts = true;
+        animator.SetTrigger("Start");
+    }
+    public void PlayButton()
+    {
+        Animator animator = pauseMenuBar.GetComponent<Animator>();
+        CanvasGroup canvasgroup = pauseMenuBar.GetComponent<CanvasGroup>();
+        canvasgroup.interactable = false;
+        canvasgroup.blocksRaycasts = false;
+        animator.SetTrigger("End");
     }
 }

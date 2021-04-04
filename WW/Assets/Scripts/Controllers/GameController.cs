@@ -71,6 +71,12 @@ public class GameController : MonoBehaviour
         gameModel.OnSaveData(usernameInfoField.text, passwordInfoField.text);
         gameView.SaveDataButton();
     }
+    public void SaveAvatarButton(string avatarname)
+    {
+        gameModel = new GameModel();
+        gameModel.OnSaveAvatar(avatarname);
+        gameView.SaveAvatarButton();
+    }
     public void SaveSettingsButton()
     {
         gameModel = new GameModel();
@@ -103,7 +109,7 @@ public class GameController : MonoBehaviour
     public void PlayNowButton()
     {
         gameModel = new GameModel();
-        gameModel.OnPlayNow(1,4, Random.Range(0, 100000).ToString());
+        gameModel.OnPlayNow(1,4, Random.Range(0, 1000).ToString());
         gameView.PlayNowButton();
     }
     public void CancelButton()

@@ -7,6 +7,7 @@ public class GameModel : MonoBehaviour
     public string Email { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
+    public string AvatarName { get; set; }
     public string ConfirmPassword { get; set; }
     public string RoomName { get; set; }
     public int MaxPlayers { get; set; }
@@ -32,6 +33,10 @@ public class GameModel : MonoBehaviour
     {
         Username = username;
         Password = password;
+    }
+    public void OnSaveAvatar(string avatarname)
+    {
+        AvatarName = avatarname;
     }
     public void OnSaveSettings(string graphics, float ingamevolume,float musicvolume)
     {

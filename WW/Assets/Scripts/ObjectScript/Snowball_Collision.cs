@@ -28,14 +28,14 @@ public class Snowball_Collision : MonoBehaviourPun
     int collisions;
     PhysicMaterial physics_mat;
 
-    GameObject target;
+    PhotonView target;
 
     //FirebaseManager fb;
 
     void Start()
     {
         Setup();
-        target = GetLocalPlayer();
+        target = GetLocalPlayer().GetComponent<PhotonView>();
 
     }
     private void Update()
@@ -43,7 +43,7 @@ public class Snowball_Collision : MonoBehaviourPun
         if (photonView.IsMine)
         {
             //When to explode
-            if (collisions > maxCollisions) Explode();
+            if (collisions > maxCollisions) photonView.RPC("Explode", RpcTarget.All);
             //Count down lifetime
             maxLifetime -= Time.deltaTime;
             if (maxLifetime <= 0) photonView.RPC("Explode", RpcTarget.All);
@@ -75,8 +75,9 @@ public class Snowball_Collision : MonoBehaviourPun
         //string id = fb.user.UserId;
         //Don't count collisions with other bullets
         if (collision.collider.CompareTag("Bullet")) return;
-        if (collision.transform.GetComponent<PhotonView>()!=null && collision.transform.GetComponent<PhotonView>().IsMine) return;
-        if (collision.transform.tag == "Player" && !collision.transform.GetComponent<PhotonView>().IsMine && !collision.transform.IsChildOf(target.transform))
+        if (!gameObject.GetPhotonView().IsMine) return;
+        if (collision.collider.GetComponent<PhotonView>()!=null && collision.collider.GetComponent<PhotonView>().IsMine) return;
+        if (collision.transform.tag == "Player" && collision.transform.GetComponent<PhotonView>()!=target )
         {
             PlayerController player = collision.gameObject.GetComponent<PlayerController>();
             if (player.player.health <= 0.5f)
@@ -89,7 +90,7 @@ public class Snowball_Collision : MonoBehaviourPun
 
        
         //Count up collisions
-        collisions++;
+        //collisions++;
 
         //Explode if bullet gits an enemy directly and explodeOnTouch is activated
         if (explodeOnTouch) photonView.RPC("Explode", RpcTarget.All);
@@ -98,6 +99,8 @@ public class Snowball_Collision : MonoBehaviourPun
     private void Delay()
     {
         Destroy(gameObject);
+        //collisions = 0;
+        //maxLifetime = 5;
         //GameObject.FindGameObjectWithTag("SnowParticle").GetComponent<Explode>().Invoke("DestroyParticle",1);
     }
      private void Setup()

@@ -10,7 +10,7 @@ using System;
 
 public class GameManager : MonoBehaviourPun
 {
-    public Camera sceneCam;
+    //public Camera sceneCam;
     //public GameObject player;
     public Transform playerSpawnPosition;
     //public Text pingRateText;
@@ -22,18 +22,21 @@ public class GameManager : MonoBehaviourPun
     public int max = 0;
     public int maxindex = 0;
     public int counter = 0;
-
+    GameView gameView;
 
     // Start is called before the first frame update
     void Start()
     {
         PhotonNetwork.SendRate = 25; //20 default
         PhotonNetwork.SerializationRate = 10;
-        sceneCam.enabled = false;
+        //sceneCam.enabled = false;
         maxkills = 4;
+        UIManager.instance.Invoke("ClearScreen", 3);
         //PhotonNetwork.Instantiate(player.name, playerSpawnPosition.position, playerSpawnPosition.rotation);
+        gameView = GameObject.Find("GameMVC").GetComponent<GameView>();
         PhotonNetwork.Instantiate("Player", playerSpawnPosition.position, playerSpawnPosition.rotation);
         StartCoroutine(EndMatch());
+        
     }
 
     // Update is called once per frame
@@ -42,7 +45,7 @@ public class GameManager : MonoBehaviourPun
         //pingRateText.text = PhotonNetwork.GetPing().ToString();
         if (timeEnded == false && maxReached == false)
         {
-            Invoke("GetFirstPlayerCurrentKills",0.2f);
+            Invoke("GetFirstPlayerCurrentKills",5f);
         }
     }
     private IEnumerator EndMatch()
@@ -55,7 +58,9 @@ public class GameManager : MonoBehaviourPun
             TimeSpan t = TimeSpan.FromSeconds(matchTime);
 
             string answer = string.Format("{0:D2}m:{1:D2}s ", t.Minutes, t.Seconds);
-            timeRemainTxt.text = answer;
+            if(PhotonNetwork.IsMasterClient)
+                gameView.SendTime(answer);
+            //timeRemainTxt.text = answer;
         }
         timeEnded = true;
         maxReached = true;
@@ -85,7 +90,7 @@ public class GameManager : MonoBehaviourPun
         }
         for (int i = 0; i < players.Length; i++)
         {
-            players[i].GetComponent<PhotonView>().RPC("SetMostKills", RpcTarget.AllBuffered, max, maxReached, timeEnded);
+            players[i].GetComponent<PhotonView>().RPC("SetMostKills", RpcTarget.All, max, maxReached, timeEnded);
         }
 
 

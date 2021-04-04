@@ -12,6 +12,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameView : MonoBehaviourPunCallbacks
@@ -37,6 +38,7 @@ public class GameView : MonoBehaviourPunCallbacks
     [Header("Lobby")]
     public TMP_InputField usernameLobbyField;
     public TMP_InputField levelLobbyField;
+    public Image avatarLobbyImage;
     public Image expLobbyFillImage;
     public GameObject scoreElement;
     public Transform scoreboardContent;
@@ -50,6 +52,7 @@ public class GameView : MonoBehaviourPunCallbacks
     public TMP_InputField rateProfileField;
     public TMP_InputField winsProfileField;
     public TMP_InputField losesProfileField;
+    public Image avatarProfileImage;
 
     [Header("Settings")]
     //graphics
@@ -126,6 +129,11 @@ public class GameView : MonoBehaviourPunCallbacks
         StartCoroutine(UpdateUsernameDatabase(gameModel.Username));
         StartCoroutine(UpdatePasswordAuth(gameModel.Password));
     }
+    public void SaveAvatarButton()
+    {
+        gameModel = gameController.gameModel;
+        StartCoroutine(UpdateAvatarDatabase(gameModel.AvatarName));
+    }
     public void SaveSettingsButton()
     {
         gameModel = gameController.gameModel;
@@ -158,6 +166,10 @@ public class GameView : MonoBehaviourPunCallbacks
     public void SettingsDataButton()
     {
         StartCoroutine(LoadSettingsData());
+    }
+    public void PauseMenuDataButton(PlayerController playercontroller)
+    {
+        StartCoroutine(LoadPauseMenuData(playercontroller));
     }
     public void SignOutButton()
     {
@@ -297,6 +309,7 @@ public class GameView : MonoBehaviourPunCallbacks
                         warningRegisterText.text = "";
                         gameController.ClearLoginFields();
                         gameController.ClearRegisterFields();
+                        StartCoroutine(UpdateAvatarDatabase("firstavatar"));
                         StartCoroutine(UpdateUsernameDatabase(_username));
                         StartCoroutine(UpdateDeaths(0));
                         StartCoroutine(UpdateKills(0));
@@ -333,7 +346,7 @@ public class GameView : MonoBehaviourPunCallbacks
     private IEnumerator UpdateUsernameAuth(string _username)
     {
         //Create a user profile and set the username
-        UserProfile profile = new UserProfile { DisplayName = _username };
+        UserProfile profile = new UserProfile { DisplayName = _username};
         //Call the Firebase auth update user profile function passing the profile with the username
         var ProfileTask = user.UpdateUserProfileAsync(profile);
         //Wait until the task completes
@@ -348,6 +361,7 @@ public class GameView : MonoBehaviourPunCallbacks
             //Auth username is now updated
         }
     }
+  
     private IEnumerator UpdateUsernameDatabase(string _username)
     {
         var DBTask = DBreference.Child("users").Child(user.UserId).Child("username").SetValueAsync(_username);
@@ -382,7 +396,21 @@ public class GameView : MonoBehaviourPunCallbacks
             //Auth password is now updated
         }
     }
+    private IEnumerator UpdateAvatarDatabase(string _avatarname)
+    {
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("avatarname").SetValueAsync(_avatarname);
 
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Database avatar is updated
+        }
+    }
 
     public IEnumerator GetKills()
     {
@@ -691,12 +719,14 @@ public class GameView : MonoBehaviourPunCallbacks
             usernameLobbyField.text = user.DisplayName;
             levelLobbyField.text = "1";
             expLobbyFillImage.fillAmount = 0;
+            avatarLobbyImage.sprite = Resources.Load<Sprite>("Sprites/firstavatar");
         }
         else
         {
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
-
+            string currentavatar = snapshot.Child("avatarname").Value.ToString();
+            avatarLobbyImage.sprite = Resources.Load<Sprite>("Sprites/"+currentavatar);
             usernameLobbyField.text = user.DisplayName;
             double currentlevel = double.Parse(snapshot.Child("level").Value.ToString());
             levelLobbyField.text = currentlevel.ToString();
@@ -730,12 +760,15 @@ public class GameView : MonoBehaviourPunCallbacks
             rateProfileField.text = "0.00";
             winsProfileField.text = "0";
             losesProfileField.text = "0";
+            avatarProfileImage.sprite = Resources.Load<Sprite>("Sprites/firstavatar");
         }
         else
         {
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
 
+            string currentavatar = snapshot.Child("avatarname").Value.ToString();
+            avatarProfileImage.sprite = Resources.Load<Sprite>("Sprites/" + currentavatar);
             usernameProfileField.text = user.DisplayName;
             levelProfileField.text = snapshot.Child("level").Value.ToString();
             killsProfileField.text = snapshot.Child("kills").Value.ToString();
@@ -777,6 +810,36 @@ public class GameView : MonoBehaviourPunCallbacks
 
         }
         UIManager.instance.SettingsScreen();
+    }
+
+    private IEnumerator LoadPauseMenuData(PlayerController playercontroller)
+    {
+        //Get the currently logged in user data
+        var DBTask = DBreference.Child("users").Child(user.UserId).Child("settings").GetValueAsync();
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else if (DBTask.Result.Value == null)
+        {
+            //No data exists yet
+            playercontroller.graphicsSettingsText.text = "HIGH";
+            playercontroller.musicVolumeSettingsSlider.value = 0;
+            playercontroller.inGameVolumeSettingsSlider.value = 0;
+        }
+        else
+        {
+            //Data has been retrieved
+            DataSnapshot snapshot = DBTask.Result;
+
+            playercontroller.graphicsSettingsText.text = snapshot.Child("graphics").Value.ToString();
+            playercontroller.musicVolumeSettingsSlider.value = float.Parse(snapshot.Child("musicvolume").Value.ToString());
+            playercontroller.inGameVolumeSettingsSlider.value = float.Parse(snapshot.Child("ingamevolume").Value.ToString());
+
+        }
     }
 
     private IEnumerator LoadScoreboardData()
@@ -833,19 +896,27 @@ public class GameView : MonoBehaviourPunCallbacks
     }
     public override void OnConnectedToMaster()
     {
-        //PhotonNetwork.JoinLobby(TypedLobby.Default);
+        PhotonNetwork.JoinLobby(TypedLobby.Default);
     }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        UIManager.instance.LoginScreen();
+        //PhotonNetwork.JoinLobby();
+    }
+
     public override void OnJoinedLobby()
     {
-        PhotonNetwork.ConnectUsingSettings();
+        //PhotonNetwork.ConnectUsingSettings();
     }
     public override void OnJoinedRoom()
     {
-        int sizeOfPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
-        AssignTeam(sizeOfPlayers);
-        UIManager.instance.RoomScreen();
-
+        //int sizeOfPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
+        //AssignTeam(sizeOfPlayers);
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         // PhotonNetwork.CurrentRoom.Players;
+        UIManager.instance.RoomScreen();
         foreach (Player p in PhotonNetwork.CurrentRoom.Players.Values)
         {
             if (p.NickName != PhotonNetwork.LocalPlayer.NickName)
@@ -853,20 +924,18 @@ public class GameView : MonoBehaviourPunCallbacks
         }
         AddPlayer(PhotonNetwork.LocalPlayer.NickName);
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            RoomStartBtnText.text = "Waiting for players...";
-        }
-        else
-        {
-            RoomStartBtnText.text = "Ready!";
-        }
+            if (PhotonNetwork.IsMasterClient)
+            {
+                RoomStartBtnText.text = "Waiting for players...";
+            }
+            else
+            {
+                RoomStartBtnText.text = "Ready!";
+            }
+       
 
     }
-    public override void OnDisconnected(DisconnectCause cause)
-    {
-        PhotonNetwork.JoinLobby();
-    }
+
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         gameModel = gameController.gameModel;
@@ -883,13 +952,18 @@ public class GameView : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         if(startedgame)
-            PhotonNetwork.LoadLevel(2);
+            SceneManager.LoadSceneAsync(2);
         StartCoroutine(LoadLobbyData());
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         base.OnPlayerLeftRoom(otherPlayer);
         RemovePlayer(otherPlayer.NickName);
+        Debug.Log(otherPlayer.NickName + " left the room");
+        if (otherPlayer.IsMasterClient)
+        {
+            PhotonNetwork.SetMasterClient(PhotonNetwork.PlayerList[1]);
+        }
     }
     public void Onclick_CreateRoomMenuBtn()
     {
@@ -907,21 +981,27 @@ public class GameView : MonoBehaviourPunCallbacks
         //roomOptions.CustomRoomProperties.Add("maxkills",20);
         PhotonNetwork.LocalPlayer.NickName = user.DisplayName;
         PhotonNetwork.CreateRoom(gameModel.RoomName, roomOptions, TypedLobby.Default, null);
+        //UIManager.instance.RoomScreen();
+
     }
     public void JoinRoomButton()
     {
         gameModel = gameController.gameModel;
+
+        PhotonNetwork.LocalPlayer.NickName = user.DisplayName;
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = (byte)gameModel.MaxPlayers;
-        //roomOptions.CustomRoomProperties["maxkills"] = 20;
-        PhotonNetwork.LocalPlayer.NickName = user.DisplayName;
+        //roomOptions.CustomRoomProperties.Add("maxkills",20);
         PhotonNetwork.JoinOrCreateRoom(gameModel.RoomName, roomOptions, TypedLobby.Default, null);
+
+
     }
     public void PlayNowButton()
     {
         PhotonNetwork.LocalPlayer.NickName = user.DisplayName;
-
-        PhotonNetwork.JoinRandomRoom();
+        if (PhotonNetwork.JoinRandomRoom())
+        {
+        }
 
     }
     public void StartButton()
@@ -951,18 +1031,16 @@ public class GameView : MonoBehaviourPunCallbacks
     }
     public void LeaveRoomButton()
     {
-        //RemovePlayer(PhotonNetwork.LocalPlayer.NickName);
         startedgame = false;
         PhotonNetwork.LeaveRoom();
         foreach (Player p in PhotonNetwork.CurrentRoom.Players.Values)
         {
             RemovePlayer(p.NickName);
         }
-        StartCoroutine(LoadLobbyData());
     }
     public void LeaveOrContinueButton()
     {
-        //RemovePlayer(PhotonNetwork.LocalPlayer.NickName);
+        
         startedgame = true;
         PhotonNetwork.LeaveRoom();
         gameController.RoomStartButton.interactable = true;
@@ -971,16 +1049,6 @@ public class GameView : MonoBehaviourPunCallbacks
         {
             RemovePlayer(p.NickName);
         }
-
-        /*count = 1;
-        gameController.RoomStartButton.interactable = true;
-        foreach (Player p in PhotonNetwork.CurrentRoom.Players.Values)
-        {
-                RemovePlayer(p.NickName);
-        }
-        
-        Destroy(GameObject.FindGameObjectWithTag("GameCanvas"));
-        StartCoroutine(LoadLobbyData());*/
     }
     public void Map1Button()
     {
@@ -1034,7 +1102,8 @@ public class GameView : MonoBehaviourPunCallbacks
     {
         chatmessage = 0,
         ready = 1,
-        start=2
+        start=2,
+        time=3
     }
 
     int count = 1;
@@ -1068,6 +1137,16 @@ public class GameView : MonoBehaviourPunCallbacks
         if (code == EventCodes.start)
         {
             UIManager.instance.ClearScreen();
+        }
+        if (code == EventCodes.time)
+        {
+            object[] datas = content as object[];
+            GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject p in players)
+            {
+                gameManager.timeRemainTxt.text = (string)datas[0];
+            }
         }
     }
 
@@ -1107,6 +1186,18 @@ public class GameView : MonoBehaviourPunCallbacks
         SendOptions sendOptions = new SendOptions();
         sendOptions.Reliability = true;
         PhotonNetwork.RaiseEvent((byte)EventCodes.chatmessage, datas, options, sendOptions);
+    }
+    public void SendTime(string time)
+    {
+        object[] datas = new object[] { time };
+        RaiseEventOptions options = new RaiseEventOptions
+        {
+            CachingOption = EventCaching.DoNotCache,
+            Receivers = ReceiverGroup.All
+        };
+        SendOptions sendOptions = new SendOptions();
+        sendOptions.Reliability = true;
+        PhotonNetwork.RaiseEvent((byte)EventCodes.time, datas, options, sendOptions);
     }
     #endregion
 }
