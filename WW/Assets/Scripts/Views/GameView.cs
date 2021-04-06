@@ -120,7 +120,7 @@ public class GameView : MonoBehaviourPunCallbacks
     public void RegisterButton()
     {
         gameModel = gameController.gameModel;
-        StartCoroutine(Register(gameModel.Email, gameModel.Password,gameModel.ConfirmPassword,gameModel.Username));
+        StartCoroutine(Register(gameModel.Email, gameModel.Password, gameModel.ConfirmPassword, gameModel.Username));
     }
     public void SaveDataButton()
     {
@@ -178,7 +178,7 @@ public class GameView : MonoBehaviourPunCallbacks
         gameController.ClearRegisterFields();
         gameController.ClearLoginFields();
     }
-    public IEnumerator Login(string _email,string _password)
+    public IEnumerator Login(string _email, string _password)
     {
         //Call the Firebase auth function and passing the email and password
         var LoginTask = auth.SignInWithEmailAndPasswordAsync(_email, _password);
@@ -233,12 +233,12 @@ public class GameView : MonoBehaviourPunCallbacks
         }
     }
 
-    private IEnumerator Register(string _email, string _password,string _confirmPassword, string _username)
+    private IEnumerator Register(string _email, string _password, string _confirmPassword, string _username)
     {
-        if (_username == null)
+        if (_username.Length < 3 || _username.Length > 20)
         {
             //If the username field is blank show a warning
-            warningRegisterText.text = "Missing Username";
+            warningRegisterText.text = "Username cannot contain less than 3 or bigger than 20 characters";
         }
         else if (_password != _confirmPassword)
         {
@@ -345,36 +345,50 @@ public class GameView : MonoBehaviourPunCallbacks
 
     private IEnumerator UpdateUsernameAuth(string _username)
     {
-        //Create a user profile and set the username
-        UserProfile profile = new UserProfile { DisplayName = _username};
-        //Call the Firebase auth update user profile function passing the profile with the username
-        var ProfileTask = user.UpdateUserProfileAsync(profile);
-        //Wait until the task completes
-        yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);
-
-        if (ProfileTask.Exception != null)
+        if (_username.Length < 3 || _username.Length > 20)
         {
-            Debug.LogWarning(message: $"Failed to register task with {ProfileTask.Exception}");
+            Debug.LogWarning("Username does not meet the correct requirements!");
         }
         else
         {
-            //Auth username is now updated
+            //Create a user profile and set the username
+            UserProfile profile = new UserProfile { DisplayName = _username };
+            //Call the Firebase auth update user profile function passing the profile with the username
+            var ProfileTask = user.UpdateUserProfileAsync(profile);
+            //Wait until the task completes
+            yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);
+
+            if (ProfileTask.Exception != null)
+            {
+                Debug.LogWarning(message: $"Failed to register task with {ProfileTask.Exception}");
+            }
+            else
+            {
+                //Auth username is now updated
+            }
         }
     }
-  
+
     private IEnumerator UpdateUsernameDatabase(string _username)
     {
-        var DBTask = DBreference.Child("users").Child(user.UserId).Child("username").SetValueAsync(_username);
-
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
+        if (_username.Length < 3 || _username.Length > 20)
         {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+            Debug.LogWarning("Username does not meet the correct requirements!");
         }
         else
         {
-            //Database username is updated
+            var DBTask = DBreference.Child("users").Child(user.UserId).Child("username").SetValueAsync(_username);
+
+            yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+            if (DBTask.Exception != null)
+            {
+                Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+            }
+            else
+            {
+                //Database username is updated
+            }
         }
     }
 
@@ -428,9 +442,9 @@ public class GameView : MonoBehaviourPunCallbacks
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
 
-            int currentkills = int.Parse(snapshot.Child("kills").Value.ToString())+1;
+            int currentkills = int.Parse(snapshot.Child("kills").Value.ToString()) + 1;
             int currentdeaths = int.Parse(snapshot.Child("deaths").Value.ToString());
-            int currentexp = int.Parse(snapshot.Child("exp").Value.ToString())+50;
+            int currentexp = int.Parse(snapshot.Child("exp").Value.ToString()) + 50;
             int currentlevel = int.Parse(snapshot.Child("level").Value.ToString());
             if (currentexp >= (Math.Pow(currentlevel, 2) * 100))
             {
@@ -459,7 +473,7 @@ public class GameView : MonoBehaviourPunCallbacks
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
 
-            int currentdeaths = int.Parse(snapshot.Child("deaths").Value.ToString())+1;
+            int currentdeaths = int.Parse(snapshot.Child("deaths").Value.ToString()) + 1;
             int currentkills = int.Parse(snapshot.Child("kills").Value.ToString());
             StartCoroutine(UpdateDeaths(currentdeaths));
             StartCoroutine(UpdateRate(currentkills, currentdeaths));
@@ -479,7 +493,7 @@ public class GameView : MonoBehaviourPunCallbacks
         else
         {
             DataSnapshot snapshot = DBTask.Result;
-            int currentwins = int.Parse(snapshot.Child("wins").Value.ToString())+1;
+            int currentwins = int.Parse(snapshot.Child("wins").Value.ToString()) + 1;
             StartCoroutine(UpdateWins(currentwins));
         }
     }
@@ -497,7 +511,7 @@ public class GameView : MonoBehaviourPunCallbacks
         else
         {
             DataSnapshot snapshot = DBTask.Result;
-            int currentloses =int.Parse(snapshot.Child("loses").Value.ToString())+1;
+            int currentloses = int.Parse(snapshot.Child("loses").Value.ToString()) + 1;
             StartCoroutine(UpdateLoses(currentloses));
         }
     }
@@ -651,7 +665,7 @@ public class GameView : MonoBehaviourPunCallbacks
         else
         {
             //Graphics are now updated
-            if (_graphics.ToUpper()=="HIGH")
+            if (_graphics.ToUpper() == "HIGH")
             {
                 GraphicsSettings.renderPipelineAsset = high;
                 Debug.Log("Default render pipeline asset is: " + GraphicsSettings.renderPipelineAsset.name);
@@ -681,7 +695,7 @@ public class GameView : MonoBehaviourPunCallbacks
         else
         {
             //Music Vol are now updated
-            
+
             masterVolumeMixer.SetFloat("musicVolume", _musicvol);
         }
     }
@@ -726,15 +740,15 @@ public class GameView : MonoBehaviourPunCallbacks
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
             string currentavatar = snapshot.Child("avatarname").Value.ToString();
-            avatarLobbyImage.sprite = Resources.Load<Sprite>("Sprites/"+currentavatar);
+            avatarLobbyImage.sprite = Resources.Load<Sprite>("Sprites/" + currentavatar);
             usernameLobbyField.text = user.DisplayName;
             double currentlevel = double.Parse(snapshot.Child("level").Value.ToString());
             levelLobbyField.text = currentlevel.ToString();
-            double currentexp= double.Parse(snapshot.Child("exp").Value.ToString());
-            double exptoreach = Math.Pow(currentlevel,2)*100;
+            double currentexp = double.Parse(snapshot.Child("exp").Value.ToString());
+            double exptoreach = Math.Pow(currentlevel, 2) * 100;
             double startexp = Math.Pow(currentlevel - 1, 2) * 100;
             double difference = exptoreach - startexp;
-            expLobbyFillImage.fillAmount = ( (float)currentexp - (float)startexp ) / (float)difference; 
+            expLobbyFillImage.fillAmount = ((float)currentexp - (float)startexp) / (float)difference;
         }
         UIManager.instance.LobbyScreen();
     }
@@ -920,19 +934,19 @@ public class GameView : MonoBehaviourPunCallbacks
         foreach (Player p in PhotonNetwork.CurrentRoom.Players.Values)
         {
             if (p.NickName != PhotonNetwork.LocalPlayer.NickName)
-                AddPlayer(p.NickName);
+                AddPlayer(p.NickName, (string)p.CustomProperties["avatarname"]);
         }
-        AddPlayer(PhotonNetwork.LocalPlayer.NickName);
+        AddPlayer(PhotonNetwork.LocalPlayer.NickName, (string)PhotonNetwork.LocalPlayer.CustomProperties["avatarname"]);
 
-            if (PhotonNetwork.IsMasterClient)
-            {
-                RoomStartBtnText.text = "Waiting for players...";
-            }
-            else
-            {
-                RoomStartBtnText.text = "Ready!";
-            }
-       
+        if (PhotonNetwork.IsMasterClient)
+        {
+            RoomStartBtnText.text = "Waiting for players...";
+        }
+        else
+        {
+            RoomStartBtnText.text = "Ready!";
+        }
+
 
     }
 
@@ -947,11 +961,11 @@ public class GameView : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         base.OnPlayerEnteredRoom(newPlayer);
-        AddPlayer(newPlayer.NickName);
+        AddPlayer(newPlayer.NickName, (string)newPlayer.CustomProperties["avatarname"]);
     }
     public override void OnLeftRoom()
     {
-        if(startedgame)
+        if (startedgame)
             SceneManager.LoadSceneAsync(2);
         StartCoroutine(LoadLobbyData());
     }
@@ -980,6 +994,11 @@ public class GameView : MonoBehaviourPunCallbacks
         roomOptions.MaxPlayers = (byte)gameModel.MaxPlayers;
         //roomOptions.CustomRoomProperties.Add("maxkills",20);
         PhotonNetwork.LocalPlayer.NickName = user.DisplayName;
+        string avatarName = (string)PhotonNetwork.LocalPlayer.CustomProperties["avatarname"];
+        avatarName = avatarLobbyImage.sprite.name;
+        ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
+        hash.Add("avatarname", avatarName);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         PhotonNetwork.CreateRoom(gameModel.RoomName, roomOptions, TypedLobby.Default, null);
         //UIManager.instance.RoomScreen();
 
@@ -989,6 +1008,11 @@ public class GameView : MonoBehaviourPunCallbacks
         gameModel = gameController.gameModel;
 
         PhotonNetwork.LocalPlayer.NickName = user.DisplayName;
+        string avatarName = (string)PhotonNetwork.LocalPlayer.CustomProperties["avatarname"];
+        avatarName = avatarLobbyImage.sprite.name;
+        ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
+        hash.Add("avatarname", avatarName);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = (byte)gameModel.MaxPlayers;
         //roomOptions.CustomRoomProperties.Add("maxkills",20);
@@ -999,6 +1023,11 @@ public class GameView : MonoBehaviourPunCallbacks
     public void PlayNowButton()
     {
         PhotonNetwork.LocalPlayer.NickName = user.DisplayName;
+        string avatarName = (string)PhotonNetwork.LocalPlayer.CustomProperties["avatarname"];
+        avatarName = avatarLobbyImage.sprite.name;
+        ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
+        hash.Add("avatarname", avatarName);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         if (PhotonNetwork.JoinRandomRoom())
         {
         }
@@ -1023,7 +1052,7 @@ public class GameView : MonoBehaviourPunCallbacks
 
             }
         }
-        
+
     }
     public void CancelButton()
     {
@@ -1040,7 +1069,7 @@ public class GameView : MonoBehaviourPunCallbacks
     }
     public void LeaveOrContinueButton()
     {
-        
+
         startedgame = true;
         PhotonNetwork.LeaveRoom();
         gameController.RoomStartButton.interactable = true;
@@ -1076,10 +1105,11 @@ public class GameView : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
     }
 
-    public void AddPlayer(string playerName)
+    public void AddPlayer(string playerName, string avatarname)
     {
         GameObject PaP = Instantiate(playerAvatarPrefab, Vector3.zero, Quaternion.identity);
         PaP.transform.GetChild(0).GetComponent<Text>().text = playerName;
+        PaP.transform.GetChild(1).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + avatarname);
         PaP.transform.parent = playersContainer.transform;
         PaP.transform.localScale = Vector3.one;
         PaP.name = playerName;
@@ -1102,8 +1132,8 @@ public class GameView : MonoBehaviourPunCallbacks
     {
         chatmessage = 0,
         ready = 1,
-        start=2,
-        time=3
+        start = 2,
+        time = 3
     }
 
     int count = 1;
@@ -1131,7 +1161,7 @@ public class GameView : MonoBehaviourPunCallbacks
             GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
             foreach (GameObject p in players)
             {
-                p.GetComponent<PlayerView>().chatMessage.text= (string)datas[0];
+                p.GetComponent<PlayerView>().chatMessage.text = (string)datas[0];
             }
         }
         if (code == EventCodes.start)
@@ -1171,6 +1201,7 @@ public class GameView : MonoBehaviourPunCallbacks
                 Receivers = ReceiverGroup.All
             };
         }
+
         SendOptions sendOptions = new SendOptions();
         sendOptions.Reliability = true;
         PhotonNetwork.RaiseEvent((byte)eventcode, datas, options, sendOptions);

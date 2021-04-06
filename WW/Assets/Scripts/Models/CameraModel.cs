@@ -15,6 +15,7 @@ public class CameraModel
     public float rotationSmoothTime = 400f;
     public float pitchMin = -70f;
     public float pitchMax = 70f;
+    public bool deathcam = false;
     public CameraModel(float posx, float posy, float posz, float rotx, float roty, float rotz)
     {
         posX = posx;

@@ -35,6 +35,15 @@ public class CameraView : MonoBehaviourPun
             transform.position = new Vector3(cameraModel.posX, cameraModel.posY, cameraModel.posZ) - transform.forward * cameraModel.distanceFromTarget;
         }
     }
+    public void DeathCam()
+    {
+        if (playerPhotonView.IsMine)
+        {
+            cameraModel = GetComponent<CameraController>().cameraModel;
+            transform.position = Vector3.Lerp(transform.position, new Vector3(cameraModel.posX, cameraModel.posY, cameraModel.posZ), 1.5f * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, new Quaternion(cameraModel.rotX, cameraModel.rotY, cameraModel.rotZ,0), 1.5f * Time.deltaTime);
+        }
+    }
 
     public GameObject LocalPlayer()
     {

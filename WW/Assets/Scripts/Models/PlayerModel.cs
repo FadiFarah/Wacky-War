@@ -17,6 +17,7 @@ public class PlayerModel
     public float gravity = -50f;
     public float smoothRotationTime = 0.25f;
     public float JumpForce = 5f;
+    public bool isdead = false;
 
     public void SetPosition(float posx, float posy, float posz)
     {

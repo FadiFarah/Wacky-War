@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerController:MonoBehaviourPun
+public class PlayerController : MonoBehaviourPun
 {
     public PlayerModel player;
     PlayerView playerView;
@@ -18,11 +18,13 @@ public class PlayerController:MonoBehaviourPun
     public Slider musicVolumeSettingsSlider;
     public Slider inGameVolumeSettingsSlider;
 
+    public bool isdead = false;
     GameView gameView;
+    GameManager gameManager;
 
     private void Start()
     {
-            player = new PlayerModel();
+        player = new PlayerModel();
 
         if (photonView.IsMine)
         {
@@ -31,35 +33,36 @@ public class PlayerController:MonoBehaviourPun
             playerView = GetComponent<PlayerView>();
             characterController = GetComponent<CharacterController>();
         }
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         gameView = GameObject.Find("GameMVC").GetComponent<GameView>();
-        
+
     }
     private void Update()
     {
         if (photonView.IsMine)
         {
-            Vector2 input = new Vector3(joystick.input.x,  joystick.input.y);
-            Vector2 inputDir = input.normalized;
-            //Movement
-            float currentSpeed = new Vector3(joystick.Horizontal, joystick.Vertical).magnitude;
-            if (!characterController.isGrounded)
-            {
-                player.posY += Time.deltaTime * player.gravity;
-            }
-            else
-                player.posY = 0;
+                Vector2 input = new Vector3(joystick.input.x, joystick.input.y);
+                Vector2 inputDir = input.normalized;
+                //Movement
+                float currentSpeed = new Vector3(joystick.Horizontal, joystick.Vertical).magnitude;
+                if (!characterController.isGrounded)
+                {
+                    player.posY += Time.deltaTime * player.gravity;
+                }
+                else
+                    player.posY = 0;
+                player.SetPosition(player.posX + (input.x * Time.deltaTime * player.speed), player.posY, player.posZ + (input.y * Time.deltaTime * player.speed));
+                playerView.Move(currentSpeed * 1);
 
-              player.SetPosition(player.posX + (input.x * Time.deltaTime * player.speed), player.posY, player.posZ + (input.y * Time.deltaTime * player.speed));
-              playerView.Move(currentSpeed*1);
 
+                //Rotation
+                if (inputDir != Vector2.zero)
+                {
+                    float rotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+                    player.SetRotation(player.rotX, player.rotY, player.rotZ);
+                    playerView.Rotate(rotation);
 
-            //Rotation
-            if (inputDir!=Vector2.zero)
-            {
-                float rotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-                player.SetRotation(player.rotX, player.rotY, player.rotZ);
-                playerView.Rotate(rotation);
-            }
+                }
         }
     }
     [PunRPC]
@@ -67,12 +70,12 @@ public class PlayerController:MonoBehaviourPun
     {
 
         player.health -= amount;
+        if (photonView.IsMine)
+            playerView.Health();
         if (player.health <= 0 && photonView.IsMine)
         {
             Death();
         }
-        if(photonView.IsMine)
-            playerView.Health();
     }
     public void Kill()
     {
@@ -84,12 +87,29 @@ public class PlayerController:MonoBehaviourPun
     }
     void Death()
     {
-        //anim.SetTrigger("death");
-        //photonView.RPC("Hideplayer",RpcTarget.All);
-        StartCoroutine(gameView.GetDeaths());
-        Debug.Log(gameView.user.DisplayName + " is dead");
+        if (player.health <= 0)
+        {
+            StartCoroutine(gameView.GetDeaths());
+            photonView.RPC("SetDeaths", RpcTarget.AllBuffered);
+        }
+    }
+    [PunRPC]
+    public void SetDeaths()
+    {
+        player.health = 1;
         player.Deaths++;
         Debug.Log(player.Deaths);
+        Debug.Log(gameView.user.DisplayName + " is dead");
+
+        if (photonView.IsMine)
+        {
+            photonView.RPC("Death", RpcTarget.AllBuffered);
+            GameObject spawnPos = gameManager.GetSpawnPosition();
+            player.SetPosition(spawnPos.transform.position.x, spawnPos.transform.position.y, spawnPos.transform.position.z);
+            player.SetRotation(spawnPos.transform.rotation.x, spawnPos.transform.rotation.y, spawnPos.transform.rotation.z);
+            StartCoroutine(playerView.MoveToSpawnPosition());
+        }
+
     }
     [PunRPC]
     public void SetKills()
@@ -113,7 +133,7 @@ public class PlayerController:MonoBehaviourPun
                     player.Kills = -1;
                     SetWinner();
                 }
-                else if(player.Kills>=0 && player.Kills<_kills)
+                else if (player.Kills >= 0 && player.Kills < _kills)
                 {
                     player.Kills = -1;
                     SetLoser();
@@ -150,12 +170,12 @@ public class PlayerController:MonoBehaviourPun
     }
     public void ChatButton()
     {
-        if(photonView.IsMine)
+        if (photonView.IsMine)
             playerView.ChatButton();
     }
     public void ChatMessageButton(string msg)
     {
-        gameView.SendMsg(gameView.user.DisplayName+": "+ msg);
+        gameView.SendMsg(gameView.user.DisplayName + ": " + msg);
     }
     public void PauseButton()
     {
@@ -178,7 +198,7 @@ public class PlayerController:MonoBehaviourPun
     public void SaveChangesButton()
     {
         GameModel gameModel = new GameModel();
-        GameObject.Find("GameMVC").GetComponent<GameController>().gameModel=gameModel;
+        GameObject.Find("GameMVC").GetComponent<GameController>().gameModel = gameModel;
         gameModel.OnSaveSettings(graphicsSettingsText.text, inGameVolumeSettingsSlider.value, musicVolumeSettingsSlider.value);
         gameView.SaveSettingsButton();
     }

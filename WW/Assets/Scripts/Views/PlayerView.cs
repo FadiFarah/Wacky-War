@@ -37,6 +37,12 @@ public class PlayerView:MonoBehaviourPun
     public GameObject chatMessages;
     public Text chatMessage;
 
+    //Deathcam
+    public CameraController cameracontroller;
+    public CharacterController characterController;
+    public GameObject playerMeshes;
+    public GameObject playerHips;
+
     float currentVelocity;
 
     void Start()
@@ -65,9 +71,9 @@ public class PlayerView:MonoBehaviourPun
     {
         if (photonView.IsMine)
         {
-            playerModel = GetComponent<PlayerController>().player;
-            transform.position = new Vector3(playerModel.posX, playerModel.posY, playerModel.posZ);
-            anim.SetFloat("Speed", speed);
+           playerModel = GetComponent<PlayerController>().player;
+           transform.position = new Vector3(playerModel.posX, playerModel.posY, playerModel.posZ);
+           anim.SetFloat("Speed", speed);
         }
     }
     public void Rotate(float rotation)
@@ -77,6 +83,26 @@ public class PlayerView:MonoBehaviourPun
             playerModel = GetComponent<PlayerController>().player;
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, rotation, ref currentVelocity, playerModel.smoothRotationTime);
         }
+    }
+    public IEnumerator MoveToSpawnPosition()
+    {
+        if (photonView.IsMine)
+        {
+            playerModel = GetComponent<PlayerController>().player;
+            float time = 8;
+            while (time >= 0)
+            {
+                yield return new WaitForEndOfFrame();
+                time -= Time.deltaTime;
+            }
+            anim.applyRootMotion = false;
+            anim.rootPosition = new Vector3(playerModel.posX, playerModel.posY, playerModel.posZ);
+            transform.position = anim.rootPosition;
+            transform.eulerAngles = new Vector3(playerModel.rotX, playerModel.rotY, playerModel.rotZ);
+            anim.applyRootMotion = true;
+
+        }
+
     }
     public void Jump()
     {
@@ -116,7 +142,35 @@ public class PlayerView:MonoBehaviourPun
     {
         if (photonView.IsMine)
         {
+            playerModel = GetComponent<PlayerController>().player;
             HealthfillImage.fillAmount = playerModel.health;
+        }
+    }
+    [PunRPC]
+    public void Death()
+    {
+        //playerHips.SetActive(false);
+        //playerMeshes.SetActive(false);
+        anim.Play("Death");
+        characterController.detectCollisions = false;
+        if (photonView.IsMine)
+        {
+            CameraModel cameramodel = cameracontroller.cameraModel;
+            cameramodel.deathcam = true;
+        }
+            Invoke("RespawnPlayer", 10f);
+    }
+    private void RespawnPlayer()
+    {
+        //playerHips.SetActive(true);
+        //playerMeshes.SetActive(true);
+        anim.Play("Idle");
+        characterController.detectCollisions = true;
+        if (photonView.IsMine)
+        {
+            CameraModel cameramodel = cameracontroller.cameraModel;
+            cameramodel.deathcam = false;
+            Health();
         }
     }
     public void SetMostKills(int _kills)

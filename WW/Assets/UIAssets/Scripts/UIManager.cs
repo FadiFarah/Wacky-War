@@ -112,7 +112,7 @@ public class UIManager : MonoBehaviour
     public void AvatarsScreen()
     {
         ClearScreen();
-        StartCoroutine(ActivateTransition(avatarsUI));
+        avatarsUI.SetActive(true);
     }
     public IEnumerator ActivateTransition(GameObject bar)
     {
