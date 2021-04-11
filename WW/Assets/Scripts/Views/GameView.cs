@@ -101,6 +101,7 @@ public class GameView : MonoBehaviourPunCallbacks
         DontDestroyOnLoad(GameObject.Find("GameMVC"));
         DontDestroyOnLoad(GameObject.Find("Canvas"));
         DontDestroyOnLoad(GameObject.Find("UIManager"));
+        DontDestroyOnLoad(GameObject.Find("MusicSounds"));
         DontDestroyOnLoad(GameObject.Find("EventSystem"));
     }
     #region Database Connections
@@ -1049,7 +1050,6 @@ public class GameView : MonoBehaviourPunCallbacks
                 gameModel = gameController.gameModel;
                 SendMsg(EventCodes.start);
                 PhotonNetwork.LoadLevel(gameModel.SceneNumber);
-
             }
         }
 
@@ -1133,7 +1133,8 @@ public class GameView : MonoBehaviourPunCallbacks
         chatmessage = 0,
         ready = 1,
         start = 2,
-        time = 3
+        time = 3,
+        spawnposition=4
     }
 
     int count = 1;
@@ -1177,6 +1178,17 @@ public class GameView : MonoBehaviourPunCallbacks
             {
                 gameManager.timeRemainTxt.text = (string)datas[0];
             }
+        }
+        if (code == EventCodes.spawnposition)
+        {
+            GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            int index = UnityEngine.Random.Range(0, gameManager.availablePlayerSpawnPositions.Count);
+            while (gameManager.spawnIndex == index)
+            {
+                index = UnityEngine.Random.Range(0, gameManager.availablePlayerSpawnPositions.Count);
+            }
+            gameManager.spawnIndex = index;
+              
         }
     }
 

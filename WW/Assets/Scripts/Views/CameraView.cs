@@ -40,8 +40,17 @@ public class CameraView : MonoBehaviourPun
         if (playerPhotonView.IsMine)
         {
             cameraModel = GetComponent<CameraController>().cameraModel;
-            transform.position = Vector3.Lerp(transform.position, new Vector3(cameraModel.posX, cameraModel.posY, cameraModel.posZ), 1.5f * Time.deltaTime);
-            transform.rotation = Quaternion.Lerp(transform.rotation, new Quaternion(cameraModel.rotX, cameraModel.rotY, cameraModel.rotZ,0), 1.5f * Time.deltaTime);
+            transform.parent = null;
+            transform.position = Vector3.Lerp(transform.position, GameObject.Find("DeathView").transform.position, 1.5f * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, GameObject.Find("DeathView").transform.rotation, 1.5f * Time.deltaTime);
+            Invoke("DeathCamEnded", 10);
+        }
+    }
+    public void DeathCamEnded()
+    {
+        if(playerPhotonView.IsMine)
+        {
+            transform.parent = playerPhotonView.transform;
         }
     }
 

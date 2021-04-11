@@ -5,8 +5,8 @@ using UnityEngine;
 public class SnowballModel
 {
     //bullet force
-    public float shootForce = 120f;
-    public float upwardForce=5f;
+    public float shootForce = 190f;
+    public float upwardForce=10f;
 
     //Gun stats
     public float timeBetweenShooting=1f;

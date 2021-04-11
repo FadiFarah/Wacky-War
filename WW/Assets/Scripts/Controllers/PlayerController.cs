@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviourPun
 {
     public PlayerModel player;
     PlayerView playerView;
+
+    [Header("Movement/Rotation")]
     public GameObject joystickBar;
     FixedJoystick joystick;
     private CharacterController characterController;
@@ -18,10 +20,11 @@ public class PlayerController : MonoBehaviourPun
     public Slider musicVolumeSettingsSlider;
     public Slider inGameVolumeSettingsSlider;
 
-    public bool isdead = false;
     GameView gameView;
     GameManager gameManager;
-
+    MusicSoundsManager musicSoundsManager;
+    public int kills=0;
+    public string triggerName;
     private void Start()
     {
         player = new PlayerModel();
@@ -32,6 +35,7 @@ public class PlayerController : MonoBehaviourPun
             joystick = GameObject.Find("Joystick").GetComponent<FixedJoystick>();
             playerView = GetComponent<PlayerView>();
             characterController = GetComponent<CharacterController>();
+            musicSoundsManager = GameObject.Find("MusicSounds").GetComponent<MusicSoundsManager>();
         }
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         gameView = GameObject.Find("GameMVC").GetComponent<GameView>();
@@ -45,12 +49,8 @@ public class PlayerController : MonoBehaviourPun
                 Vector2 inputDir = input.normalized;
                 //Movement
                 float currentSpeed = new Vector3(joystick.Horizontal, joystick.Vertical).magnitude;
-                if (!characterController.isGrounded)
-                {
-                    player.posY += Time.deltaTime * player.gravity;
-                }
-                else
-                    player.posY = 0;
+            if(!player.climbingLadder)
+            {
                 player.SetPosition(player.posX + (input.x * Time.deltaTime * player.speed), player.posY, player.posZ + (input.y * Time.deltaTime * player.speed));
                 playerView.Move(currentSpeed * 1);
 
@@ -63,6 +63,21 @@ public class PlayerController : MonoBehaviourPun
                     playerView.Rotate(rotation);
 
                 }
+            }
+            else
+            {
+                if (triggerName == "StartTriggerLadder1")
+                {
+                    player.SetPosition(gameManager.ladder1Position.transform.position.x, player.posY + (inputDir.y * Time.deltaTime * player.speed), gameManager.ladder1Position.transform.position.z);
+                    player.SetRotation(gameManager.ladder1Position.transform.eulerAngles.x, gameManager.ladder1Position.transform.eulerAngles.y, gameManager.ladder1Position.transform.eulerAngles.z);
+                }
+                if(triggerName== "EndTriggerLadder1")
+                {
+                    player.SetPosition(player.posX, player.posY+50, player.posZ+50);
+                    player.climbingLadder = false;
+                }
+                playerView.ClimbLadder(inputDir.y * 1);
+            }
         }
     }
     [PunRPC]
@@ -114,9 +129,12 @@ public class PlayerController : MonoBehaviourPun
     [PunRPC]
     public void SetKills()
     {
-        player.Kills++;
+        kills++;
         if (photonView.IsMine)
+        {
+            player.Kills++;
             playerView.SetYouKills(player.Kills);
+        }
     }
 
     [PunRPC]
@@ -128,7 +146,7 @@ public class PlayerController : MonoBehaviourPun
             playerView.SetMostKills(_kills);
             if (maxReached == true && timeEnded == true)
             {
-                if (player.Kills >= _kills)
+                if (kills >= _kills)
                 {
                     player.Kills = -1;
                     SetWinner();
@@ -181,6 +199,7 @@ public class PlayerController : MonoBehaviourPun
     {
         if (photonView.IsMine)
         {
+            musicSoundsManager.UIClick1();
             playerView.PauseButton();
             PlayerController playercontroller = GetComponent<PlayerController>();
             gameView.PauseMenuDataButton(playercontroller);
@@ -189,18 +208,32 @@ public class PlayerController : MonoBehaviourPun
     public void PlayButton()
     {
         if (photonView.IsMine)
+        {
+            musicSoundsManager.UIClick1();
             playerView.PlayButton();
+        }
     }
     public void ContinueButton()
     {
+        musicSoundsManager.UIClick2();
         gameView.LeaveOrContinueButton();
     }
     public void SaveChangesButton()
     {
+        musicSoundsManager.UIClick2();
         GameModel gameModel = new GameModel();
         GameObject.Find("GameMVC").GetComponent<GameController>().gameModel = gameModel;
         gameModel.OnSaveSettings(graphicsSettingsText.text, inGameVolumeSettingsSlider.value, musicVolumeSettingsSlider.value);
         gameView.SaveSettingsButton();
+    }
+    private void OnTriggerEnter(Collider trigger)
+    {
+        if (photonView.IsMine)
+        {
+            if (trigger.tag == "StartLadder")
+                player.climbingLadder = true;
+            triggerName = trigger.name;
+        }
     }
 
 }

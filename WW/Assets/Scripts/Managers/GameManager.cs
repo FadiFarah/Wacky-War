@@ -13,7 +13,9 @@ public class GameManager : MonoBehaviourPun
     //public Camera sceneCam;
     //public GameObject player;
     public List<GameObject> availablePlayerSpawnPositions;
+    public List<GameObject> unavailablePlayerSpawnPositions;
     GameObject currentSpawnPosition;
+    public int spawnIndex;
     //public Text pingRateText;
     public float matchTime;
     public TMP_Text timeRemainTxt;
@@ -24,6 +26,7 @@ public class GameManager : MonoBehaviourPun
     public int maxindex = 0;
     public int counter = 0;
     public GameView gameView;
+    public GameObject ladder1Position;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +37,8 @@ public class GameManager : MonoBehaviourPun
         maxkills = 4;
         UIManager.instance.Invoke("ClearScreen", 3);
         gameView = GameObject.Find("GameMVC").GetComponent<GameView>();
+        spawnIndex = ((PhotonNetwork.LocalPlayer.ActorNumber-1)%8);
+        Debug.LogWarning(spawnIndex);
         currentSpawnPosition = GetSpawnPosition();
         PhotonNetwork.Instantiate("Player", currentSpawnPosition.transform.position, currentSpawnPosition.transform.rotation);
         StartCoroutine(EndMatch());
@@ -43,6 +48,7 @@ public class GameManager : MonoBehaviourPun
     // Update is called once per frame
     void LateUpdate()
     {
+
         //pingRateText.text = PhotonNetwork.GetPing().ToString();
         if (timeEnded == false && maxReached == false)
         {
@@ -61,7 +67,6 @@ public class GameManager : MonoBehaviourPun
             string answer = string.Format("{0:D2}m:{1:D2}s ", t.Minutes, t.Seconds);
             if (PhotonNetwork.IsMasterClient)
                 gameView.SendTime(answer);
-            //timeRemainTxt.text = answer;
         }
         timeEnded = true;
         maxReached = true;
@@ -77,9 +82,9 @@ public class GameManager : MonoBehaviourPun
         }
         for (int i = 0; i < players.Length; i++)
         {
-            if (players[i].GetComponent<PlayerController>().player.Kills > max)
+            if (players[i].GetComponent<PlayerController>().kills > max)
             {
-                max = players[i].GetComponent<PlayerController>().player.Kills;
+                max = players[i].GetComponent<PlayerController>().kills;
                 maxindex = i;
                 if (max == maxkills)
                 {
@@ -91,11 +96,22 @@ public class GameManager : MonoBehaviourPun
         if (players.Length > 0)
             players[0].GetComponent<PhotonView>().RPC("SetMostKills", RpcTarget.All, max, maxReached, timeEnded);
     }
-
     public GameObject GetSpawnPosition()
     {
-        GameObject spawnPosition = availablePlayerSpawnPositions[UnityEngine.Random.Range(0, availablePlayerSpawnPositions.Count)];
-        return spawnPosition;
+        gameView.SendMsg(GameView.EventCodes.spawnposition);
+        unavailablePlayerSpawnPositions.Add(availablePlayerSpawnPositions[spawnIndex]);
+        GameObject spawnPos = availablePlayerSpawnPositions[spawnIndex];
+        availablePlayerSpawnPositions.RemoveAt(spawnIndex);
+        Invoke("MakePositionAvailable", 5);
+        return spawnPos;
+    }
+    public void MakePositionAvailable()
+    {
+        if(unavailablePlayerSpawnPositions.Count>0)
+        {
+            availablePlayerSpawnPositions.Add(unavailablePlayerSpawnPositions[0]);
+            unavailablePlayerSpawnPositions.RemoveAt(0);
+        }
     }
 
 }

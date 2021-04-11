@@ -75,10 +75,12 @@ public class Snowball_Collision : MonoBehaviourPun
         //string id = fb.user.UserId;
         //Don't count collisions with other bullets
         if (collision.collider.CompareTag("Bullet")) return;
+        if(collision.transform.tag!="Player") target.GetComponent<inGameSoundsManager>().HitObjectSound();
         if (!gameObject.GetPhotonView().IsMine) return;
         if (collision.collider.GetComponent<PhotonView>()!=null && collision.collider.GetComponent<PhotonView>().IsMine) return;
         if (collision.transform.tag == "Player" && collision.transform.GetComponent<PhotonView>()!=target )
         {
+            target.GetComponent<inGameSoundsManager>().HitPlayerSound();
             PlayerController player = collision.gameObject.GetComponent<PlayerController>();
             if (player.player.health <= 0.5f)
             {

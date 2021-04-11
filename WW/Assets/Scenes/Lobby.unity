@@ -218,6 +218,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &6998175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,6 +354,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1392338394}
         m_TargetAssemblyTypeName: GameView, Assembly-CSharp
         m_MethodName: LobbyDataButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -536,6 +560,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &29122839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -670,6 +706,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &33885981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -794,6 +842,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: SaveAvatarButton
         m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: fifthavatar
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1257,6 +1317,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1218686132}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: AvatarsScreen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2065,7 +2137,6 @@ GameObject:
   m_Component:
   - component: {fileID: 130537429}
   - component: {fileID: 130537431}
-  - component: {fileID: 130537430}
   - component: {fileID: 130537432}
   m_Layer: 5
   m_Name: Camera
@@ -2093,14 +2164,6 @@ RectTransform:
   m_AnchoredPosition: {x: 93.5, y: 749.7}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!81 &130537430
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 130537428}
-  m_Enabled: 1
 --- !u!20 &130537431
 Camera:
   m_ObjectHideFlags: 0
@@ -2473,6 +2536,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1218686132}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: ForgotPassScreen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3720,6 +3795,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &266018336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3833,6 +3920,133 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 270214894}
   m_CullTransparentMesh: 1
+--- !u!1 &283389464
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 283389465}
+  - component: {fileID: 283389466}
+  m_Layer: 0
+  m_Name: UIClick1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &283389465
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283389464}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1224932568}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &283389466
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283389464}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -2325367277708849681, guid: da2da9abf5a3fff4bacbf38c5897afb9, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 54bdaceb1adf94a34bcf541a08e1387b, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &284344562
 GameObject:
   m_ObjectHideFlags: 0
@@ -4074,6 +4288,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: SaveAvatarButton
         m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: sixthavatar
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4362,6 +4588,30 @@ MonoBehaviour:
       - m_Target: {fileID: 1392338396}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: SaveDataButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4792,6 +5042,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1392338394}
         m_TargetAssemblyTypeName: GameView, Assembly-CSharp
         m_MethodName: LobbyDataButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5581,7 +5843,6 @@ GameObject:
   m_Component:
   - component: {fileID: 387814607}
   - component: {fileID: 387814609}
-  - component: {fileID: 387814608}
   - component: {fileID: 387814610}
   m_Layer: 5
   m_Name: Camera
@@ -5609,14 +5870,6 @@ RectTransform:
   m_AnchoredPosition: {x: 93.5, y: 749.7}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!81 &387814608
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 387814606}
-  m_Enabled: 1
 --- !u!20 &387814609
 Camera:
   m_ObjectHideFlags: 0
@@ -5912,6 +6165,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: SaveAvatarButton
         m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: eighthavatar
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6354,6 +6619,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1392338394}
         m_TargetAssemblyTypeName: GameView, Assembly-CSharp
         m_MethodName: ScoreboardButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7424,6 +7701,18 @@ MonoBehaviour:
           m_StringArgument: fourthavatar
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: fourthavatar
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &474936509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7906,7 +8195,19 @@ MonoBehaviour:
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &522095525
 MonoBehaviour:
@@ -8121,6 +8422,133 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 532015072}
   m_CullTransparentMesh: 0
+--- !u!1 &538666881
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 538666882}
+  - component: {fileID: 538666883}
+  m_Layer: 0
+  m_Name: UIClick2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &538666882
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 538666881}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1224932568}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &538666883
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 538666881}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -2325367277708849681, guid: da2da9abf5a3fff4bacbf38c5897afb9, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 29df8e798230e44128d54040c4971b7f, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 0.85
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &544443736
 GameObject:
   m_ObjectHideFlags: 0
@@ -8334,6 +8762,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1392338396}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: FourPlayersButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8736,6 +9176,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1392338394}
         m_TargetAssemblyTypeName: GameView, Assembly-CSharp
         m_MethodName: ProfileDataButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11117,7 +11569,6 @@ GameObject:
   m_Component:
   - component: {fileID: 662814781}
   - component: {fileID: 662814784}
-  - component: {fileID: 662814783}
   - component: {fileID: 662814782}
   m_Layer: 5
   m_Name: Camera
@@ -11177,14 +11628,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!81 &662814783
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 662814780}
-  m_Enabled: 1
 --- !u!20 &662814784
 Camera:
   m_ObjectHideFlags: 0
@@ -11274,7 +11717,6 @@ GameObject:
   m_Component:
   - component: {fileID: 669574628}
   - component: {fileID: 669574630}
-  - component: {fileID: 669574629}
   - component: {fileID: 669574631}
   m_Layer: 5
   m_Name: Camera
@@ -11302,14 +11744,6 @@ RectTransform:
   m_AnchoredPosition: {x: 93.5, y: 749.7}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!81 &669574629
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 669574627}
-  m_Enabled: 1
 --- !u!20 &669574630
 Camera:
   m_ObjectHideFlags: 0
@@ -12047,6 +12481,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &720646400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12095,7 +12541,6 @@ GameObject:
   m_Component:
   - component: {fileID: 721237061}
   - component: {fileID: 721237063}
-  - component: {fileID: 721237062}
   - component: {fileID: 721237064}
   m_Layer: 5
   m_Name: Camera
@@ -12123,14 +12568,6 @@ RectTransform:
   m_AnchoredPosition: {x: 93.5, y: 749.7}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!81 &721237062
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 721237060}
-  m_Enabled: 1
 --- !u!20 &721237063
 Camera:
   m_ObjectHideFlags: 0
@@ -12216,7 +12653,6 @@ GameObject:
   m_Component:
   - component: {fileID: 725245976}
   - component: {fileID: 725245978}
-  - component: {fileID: 725245977}
   - component: {fileID: 725245979}
   m_Layer: 5
   m_Name: Camera
@@ -12244,14 +12680,6 @@ RectTransform:
   m_AnchoredPosition: {x: 93.5, y: 749.7}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!81 &725245977
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 725245975}
-  m_Enabled: 1
 --- !u!20 &725245978
 Camera:
   m_ObjectHideFlags: 0
@@ -13838,6 +14266,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &850944595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13962,6 +14402,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1392338396}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: Map3Button
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15158,6 +15610,18 @@ MonoBehaviour:
           m_StringArgument: seventhavatar
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: seventhavatar
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &953027167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15903,6 +16367,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &974010656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16547,6 +17023,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &998461432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16879,6 +17367,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1392338394}
         m_TargetAssemblyTypeName: GameView, Assembly-CSharp
         m_MethodName: LobbyDataButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -17265,6 +17765,18 @@ MonoBehaviour:
           m_StringArgument: firstavatar
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: firstavatar
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1064601951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17553,6 +18065,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1064959910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17811,6 +18335,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: SaveAvatarButton
         m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: secondavatar
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -18693,6 +19229,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1114929691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18952,6 +19500,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1218686132}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: InfoScreen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -19990,7 +20550,7 @@ GameObject:
   - component: {fileID: 1201094130}
   - component: {fileID: 1201094129}
   m_Layer: 0
-  m_Name: Xp
+  m_Name: Level
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20035,7 +20595,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Xp
+  m_text: Level
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
@@ -20476,6 +21036,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1213346381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20807,6 +21379,65 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1219889321}
   m_CullTransparentMesh: 0
+--- !u!1 &1224932567
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1224932568}
+  - component: {fileID: 1224932569}
+  - component: {fileID: 1224932570}
+  m_Layer: 0
+  m_Name: MusicSounds
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1224932568
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1224932567}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 90.8439, y: 9.750691, z: -76.69581}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 283389465}
+  - {fileID: 538666882}
+  - {fileID: 1461690643}
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1224932569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1224932567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa3ab42ec78f2f445ae975b88e955572, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicSectionAudios:
+  - {fileID: 283389466}
+  - {fileID: 538666883}
+  - {fileID: 1461690644}
+--- !u!81 &1224932570
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1224932567}
+  m_Enabled: 1
 --- !u!1 &1228784165
 GameObject:
   m_ObjectHideFlags: 0
@@ -21319,6 +21950,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1392338394}
         m_TargetAssemblyTypeName: GameView, Assembly-CSharp
         m_MethodName: LobbyDataButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -21905,6 +22548,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1296255769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22144,6 +22799,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1392338396}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: StartButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -24186,6 +24853,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1363092914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24626,7 +25305,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1383308643}
   - component: {fileID: 1383308645}
-  - component: {fileID: 1383308644}
   - component: {fileID: 1383308646}
   m_Layer: 5
   m_Name: Camera
@@ -24654,14 +25332,6 @@ RectTransform:
   m_AnchoredPosition: {x: 93.5, y: 749.7}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!81 &1383308644
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1383308642}
-  m_Enabled: 1
 --- !u!20 &1383308645
 Camera:
   m_ObjectHideFlags: 0
@@ -24915,6 +25585,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1391619613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25158,6 +25840,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1397988930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25291,6 +25985,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1401414325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25339,7 +26045,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1413612196}
   - component: {fileID: 1413612198}
-  - component: {fileID: 1413612197}
   - component: {fileID: 1413612199}
   m_Layer: 5
   m_Name: Camera
@@ -25367,14 +26072,6 @@ RectTransform:
   m_AnchoredPosition: {x: 93.5, y: 749.7}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!81 &1413612197
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1413612195}
-  m_Enabled: 1
 --- !u!20 &1413612198
 Camera:
   m_ObjectHideFlags: 0
@@ -25787,7 +26484,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1435342005}
   - component: {fileID: 1435342008}
-  - component: {fileID: 1435342007}
   - component: {fileID: 1435342006}
   m_Layer: 5
   m_Name: Camera
@@ -25847,14 +26543,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!81 &1435342007
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1435342004}
-  m_Enabled: 1
 --- !u!20 &1435342008
 Camera:
   m_ObjectHideFlags: 0
@@ -26491,6 +27179,133 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1458898199}
   m_CullTransparentMesh: 1
+--- !u!1 &1461690642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1461690643}
+  - component: {fileID: 1461690644}
+  m_Layer: 0
+  m_Name: inGameMusic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1461690643
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1461690642}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1224932568}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1461690644
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1461690642}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -2325367277708849681, guid: da2da9abf5a3fff4bacbf38c5897afb9, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 89c8f48ec2558fd4090abc41e9e1b93a, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1461961441
 GameObject:
   m_ObjectHideFlags: 0
@@ -27937,6 +28752,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1528848378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28482,7 +29309,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 888148611}
   m_HandleRect: {fileID: 888148610}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -29027,6 +29854,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1218686132}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: LoginScreen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -30623,6 +31462,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1653806987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30671,7 +31522,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1654850087}
   - component: {fileID: 1654850089}
-  - component: {fileID: 1654850088}
   - component: {fileID: 1654850090}
   m_Layer: 5
   m_Name: Camera
@@ -30699,14 +31549,6 @@ RectTransform:
   m_AnchoredPosition: {x: 93.5, y: 749.7}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!81 &1654850088
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1654850086}
-  m_Enabled: 1
 --- !u!20 &1654850089
 Camera:
   m_ObjectHideFlags: 0
@@ -32671,6 +33513,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1834980005
 GameObject:
   m_ObjectHideFlags: 0
@@ -32809,6 +33663,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1392338396}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: SendPassResetButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -33189,6 +34055,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1218686132}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: AvatarsScreen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -33647,7 +34525,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1912753176}
   - component: {fileID: 1912753178}
-  - component: {fileID: 1912753177}
   - component: {fileID: 1912753179}
   m_Layer: 5
   m_Name: Camera
@@ -33675,14 +34552,6 @@ RectTransform:
   m_AnchoredPosition: {x: 93.5, y: 749.7}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!81 &1912753177
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1912753175}
-  m_Enabled: 1
 --- !u!20 &1912753178
 Camera:
   m_ObjectHideFlags: 0
@@ -34313,6 +35182,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1957284894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34715,6 +35596,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1978722882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34763,7 +35656,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1981869038}
   - component: {fileID: 1981869040}
-  - component: {fileID: 1981869039}
   - component: {fileID: 1981869041}
   m_Layer: 5
   m_Name: Camera
@@ -34791,14 +35683,6 @@ RectTransform:
   m_AnchoredPosition: {x: 93.5, y: 749.7}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!81 &1981869039
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1981869037}
-  m_Enabled: 1
 --- !u!20 &1981869040
 Camera:
   m_ObjectHideFlags: 0
@@ -35044,6 +35928,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1992897673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35177,6 +36073,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2000820382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35301,6 +36209,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: SaveAvatarButton
         m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: thirdavatar
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -35512,6 +36432,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1392338396}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: JoinRoomButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick2
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -36522,6 +37454,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2088194588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37494,6 +38438,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1218686132}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: InfoScreen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1224932569}
+        m_TargetAssemblyTypeName: MusicSoundsManager, Assembly-CSharp
+        m_MethodName: UIClick1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

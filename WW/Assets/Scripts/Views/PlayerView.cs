@@ -43,6 +43,9 @@ public class PlayerView:MonoBehaviourPun
     public GameObject playerMeshes;
     public GameObject playerHips;
 
+    public GameObject inGameSounds;
+    public inGameSoundsManager inGameSoundsManager;
+
     float currentVelocity;
 
     void Start()
@@ -61,6 +64,8 @@ public class PlayerView:MonoBehaviourPun
             mostKillsBar.SetActive(true);
             chatSystemBar.SetActive(true);
             pauseBar.SetActive(true);
+            inGameSounds.SetActive(true);
+            inGameSounds.transform.parent = null;
             GameObject.Find("Jump_Btn").GetComponent<FixedJumpButton>().SetPlayer(this);
             GameObject.Find("Crouch_Btn").GetComponent<FixedCrouchButton>().SetPlayer(this);
             GameObject.Find("Slide_Btn").GetComponent<FixedSlideButton>().SetPlayer(this);
@@ -71,9 +76,10 @@ public class PlayerView:MonoBehaviourPun
     {
         if (photonView.IsMine)
         {
-           playerModel = GetComponent<PlayerController>().player;
+           playerModel = GetComponent<PlayerController>().player; 
            transform.position = new Vector3(playerModel.posX, playerModel.posY, playerModel.posZ);
            anim.SetFloat("Speed", speed);
+            anim.SetBool("climbingLadder", false);
         }
     }
     public void Rotate(float rotation)
@@ -84,12 +90,23 @@ public class PlayerView:MonoBehaviourPun
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, rotation, ref currentVelocity, playerModel.smoothRotationTime);
         }
     }
+    public void ClimbLadder(float speed)
+    {
+        if (photonView.IsMine)
+        {
+            playerModel = GetComponent<PlayerController>().player;
+            transform.position = new Vector3(playerModel.posX, playerModel.posY, playerModel.posZ);
+            transform.eulerAngles = new Vector3(playerModel.rotX, playerModel.rotY, playerModel.rotZ);
+            anim.SetFloat("Speed", speed);
+            anim.SetBool("climbingLadder", true);
+        }
+    }
     public IEnumerator MoveToSpawnPosition()
     {
         if (photonView.IsMine)
         {
             playerModel = GetComponent<PlayerController>().player;
-            float time = 8;
+            float time = 10;
             while (time >= 0)
             {
                 yield return new WaitForEndOfFrame();
@@ -98,8 +115,8 @@ public class PlayerView:MonoBehaviourPun
             anim.applyRootMotion = false;
             anim.rootPosition = new Vector3(playerModel.posX, playerModel.posY, playerModel.posZ);
             transform.position = anim.rootPosition;
-            transform.eulerAngles = new Vector3(playerModel.rotX, playerModel.rotY, playerModel.rotZ);
             anim.applyRootMotion = true;
+            transform.eulerAngles = new Vector3(playerModel.rotX, playerModel.rotY, playerModel.rotZ);
 
         }
 
@@ -110,6 +127,7 @@ public class PlayerView:MonoBehaviourPun
         {
             playerModel = GetComponent<PlayerController>().player;
             anim.SetTrigger("jump");
+            inGameSoundsManager.JumpSound();
             float jumpVelocity = Mathf.Sqrt(-2 * playerModel.gravity * playerModel.JumpForce);
             playerModel.posY = jumpVelocity;
         }
@@ -149,8 +167,6 @@ public class PlayerView:MonoBehaviourPun
     [PunRPC]
     public void Death()
     {
-        //playerHips.SetActive(false);
-        //playerMeshes.SetActive(false);
         anim.Play("Death");
         characterController.detectCollisions = false;
         if (photonView.IsMine)

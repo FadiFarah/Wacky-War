@@ -14,11 +14,10 @@ public class PlayerModel
     public int Deaths = 0;
     public float health=1f;
     public float speed = 5f;
-    public float gravity = -50f;
+    public float gravity = -100f;
     public float smoothRotationTime = 0.25f;
-    public float JumpForce = 5f;
-    public bool isdead = false;
-
+    public float JumpForce = 10f;
+    public bool climbingLadder = false;
     public void SetPosition(float posx, float posy, float posz)
     {
         posX = posx;
