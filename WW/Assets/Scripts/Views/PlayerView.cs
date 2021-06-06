@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class PlayerView:MonoBehaviourPun
 {
-    PlayerModel playerModel;
+    public PlayerModel playerModel;
     public Animator anim;
     public GameObject mostKillsBar;
     public TMP_Text mostKillsTxt;
@@ -25,6 +25,8 @@ public class PlayerView:MonoBehaviourPun
     public GameObject crouchBar;
 
     public GameObject slideBar;
+
+    public GameObject shootBar;
 
     public GameObject matchResultFrameBar;
     public GameObject victoryImage;
@@ -79,7 +81,6 @@ public class PlayerView:MonoBehaviourPun
            playerModel = GetComponent<PlayerController>().player; 
            transform.position = new Vector3(playerModel.posX, playerModel.posY, playerModel.posZ);
            anim.SetFloat("Speed", speed);
-            anim.SetBool("climbingLadder", false);
         }
     }
     public void Rotate(float rotation)
@@ -90,15 +91,75 @@ public class PlayerView:MonoBehaviourPun
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, rotation, ref currentVelocity, playerModel.smoothRotationTime);
         }
     }
+    public void ZipLine()
+    {
+        if (photonView.IsMine)
+        {
+            Transform startPos = GameObject.Find("RopeStartPosition").transform;
+            anim.applyRootMotion = false;
+            Debug.Log("Zipping View");
+            jumpBar.SetActive(false);
+            crouchBar.SetActive(false);
+            slideBar.SetActive(false);
+            shootBar.SetActive(false);
+            playerModel = GetComponent<PlayerController>().player;
+
+            transform.position = new Vector3(startPos.position.x + playerModel.posX, startPos.position.y-25,startPos.position.z);
+            transform.eulerAngles = new Vector3(startPos.rotation.x, 90, startPos.rotation.z);
+            anim.SetBool("zipLine", true);
+        }
+    }
+    public void StopZipLine()
+    {
+        if (photonView.IsMine)
+        {
+            jumpBar.SetActive(true);
+            crouchBar.SetActive(true);
+            slideBar.SetActive(true);
+            shootBar.SetActive(true);
+            playerModel = GetComponent<PlayerController>().player;
+            playerModel.zipLine = false;
+            anim.applyRootMotion = true;
+            anim.SetBool("zipLine", false);
+        }
+    }
     public void ClimbLadder(float speed)
     {
         if (photonView.IsMine)
         {
+            jumpBar.SetActive(false);
+            crouchBar.SetActive(false);
+            slideBar.SetActive(false);
+            shootBar.SetActive(false);
             playerModel = GetComponent<PlayerController>().player;
             transform.position = new Vector3(playerModel.posX, playerModel.posY, playerModel.posZ);
             transform.eulerAngles = new Vector3(playerModel.rotX, playerModel.rotY, playerModel.rotZ);
             anim.SetFloat("Speed", speed);
             anim.SetBool("climbingLadder", true);
+        }
+    }
+    public void StopClimbLadder()
+    {
+        if (photonView.IsMine)
+        {
+            jumpBar.SetActive(true);
+            crouchBar.SetActive(true);
+            slideBar.SetActive(true);
+            shootBar.SetActive(true);
+            playerModel = GetComponent<PlayerController>().player;
+            playerModel.climbingLadder = false;
+            anim.SetBool("climbingLadder", false);
+            Invoke("RespawnLadderElevator", 4);
+        }
+    }
+    public void RespawnLadderElevator()
+    {
+        if (photonView.IsMine)
+        {
+            GameObject LadderElevator1 = GameObject.Find("LadderElevator1");
+            GameObject LadderElevator2 = GameObject.Find("LadderElevator2");
+            LadderElevator1.transform.position = new Vector3(LadderElevator1.transform.position.x, 7, LadderElevator1.transform.position.z);
+            LadderElevator2.transform.position = new Vector3(LadderElevator2.transform.position.x, 0.5f, LadderElevator2.transform.position.z);
         }
     }
     public IEnumerator MoveToSpawnPosition()
@@ -174,7 +235,7 @@ public class PlayerView:MonoBehaviourPun
             CameraModel cameramodel = cameracontroller.cameraModel;
             cameramodel.deathcam = true;
         }
-            Invoke("RespawnPlayer", 10f);
+        Invoke("RespawnPlayer", 10f);
     }
     private void RespawnPlayer()
     {

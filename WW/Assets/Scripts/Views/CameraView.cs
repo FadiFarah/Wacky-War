@@ -33,6 +33,7 @@ public class CameraView : MonoBehaviourPun
         {
             cameraModel = GetComponent<CameraController>().cameraModel;
             transform.position = new Vector3(cameraModel.posX, cameraModel.posY, cameraModel.posZ) - transform.forward * cameraModel.distanceFromTarget;
+
         }
     }
     public void DeathCam()
@@ -66,5 +67,6 @@ public class CameraView : MonoBehaviourPun
         }
         return null;
     }
+
 
 }

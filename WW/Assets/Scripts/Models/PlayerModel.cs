@@ -18,6 +18,7 @@ public class PlayerModel
     public float smoothRotationTime = 0.25f;
     public float JumpForce = 10f;
     public bool climbingLadder = false;
+    public bool zipLine = false;
     public void SetPosition(float posx, float posy, float posz)
     {
         posX = posx;

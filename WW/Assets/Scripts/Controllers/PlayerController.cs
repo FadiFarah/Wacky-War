@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviourPun
     [Header("Movement/Rotation")]
     public GameObject joystickBar;
     FixedJoystick joystick;
+    public GameObject zipLine;
+    public FixedZipLineButton zipLineBtn;
     private CharacterController characterController;
 
     [Header("Settings")]
@@ -23,7 +25,7 @@ public class PlayerController : MonoBehaviourPun
     GameView gameView;
     GameManager gameManager;
     MusicSoundsManager musicSoundsManager;
-    public int kills=0;
+    public int kills = 0;
     public string triggerName;
     private void Start()
     {
@@ -36,6 +38,8 @@ public class PlayerController : MonoBehaviourPun
             playerView = GetComponent<PlayerView>();
             characterController = GetComponent<CharacterController>();
             musicSoundsManager = GameObject.Find("MusicSounds").GetComponent<MusicSoundsManager>();
+            zipLineBtn.SetPlayer(this);
+
         }
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         gameView = GameObject.Find("GameMVC").GetComponent<GameView>();
@@ -45,11 +49,11 @@ public class PlayerController : MonoBehaviourPun
     {
         if (photonView.IsMine)
         {
-                Vector2 input = new Vector3(joystick.input.x, joystick.input.y);
-                Vector2 inputDir = input.normalized;
-                //Movement
-                float currentSpeed = new Vector3(joystick.Horizontal, joystick.Vertical).magnitude;
-            if(!player.climbingLadder)
+            Vector2 input = new Vector3(joystick.input.x, joystick.input.y);
+            Vector2 inputDir = input.normalized;
+            //Movement
+            float currentSpeed = new Vector3(joystick.Horizontal, joystick.Vertical).magnitude;
+            if (!player.climbingLadder && !player.zipLine)
             {
                 player.SetPosition(player.posX + (input.x * Time.deltaTime * player.speed), player.posY, player.posZ + (input.y * Time.deltaTime * player.speed));
                 playerView.Move(currentSpeed * 1);
@@ -64,19 +68,33 @@ public class PlayerController : MonoBehaviourPun
 
                 }
             }
-            else
+            else if (player.climbingLadder)
             {
                 if (triggerName == "StartTriggerLadder1")
                 {
                     player.SetPosition(gameManager.ladder1Position.transform.position.x, player.posY + (inputDir.y * Time.deltaTime * player.speed), gameManager.ladder1Position.transform.position.z);
                     player.SetRotation(gameManager.ladder1Position.transform.eulerAngles.x, gameManager.ladder1Position.transform.eulerAngles.y, gameManager.ladder1Position.transform.eulerAngles.z);
+                    playerView.ClimbLadder(inputDir.y);
+                    GameObject [] LadderElevator = GameObject.FindGameObjectsWithTag("LadderElevator");
+                    for(int i=0;i<LadderElevator.Length;i++)
+                        LadderElevator[i].transform.position = new Vector3(LadderElevator[i].transform.position.x, LadderElevator[i].transform.position.y + (inputDir.y * Time.deltaTime * 2f * player.speed), LadderElevator[i].transform.position.z);
                 }
-                if(triggerName== "EndTriggerLadder1")
+                if (triggerName == "EndTriggerLadder1")
                 {
-                    player.SetPosition(player.posX, player.posY+50, player.posZ+50);
-                    player.climbingLadder = false;
+                    playerView.StopClimbLadder();
                 }
-                playerView.ClimbLadder(inputDir.y * 1);
+            }
+            else if (player.zipLine)
+            {
+
+                Debug.Log("Zipping Controller");
+                player.SetPosition(player.posX + (Time.deltaTime * player.speed*5), player.posY, player.posZ);
+                player.SetRotation(player.rotX, player.rotY, player.rotZ);
+                playerView.ZipLine();
+                if (triggerName == "EndZipLine")
+                {
+                    playerView.StopZipLine();
+                }
             }
         }
     }
@@ -122,6 +140,7 @@ public class PlayerController : MonoBehaviourPun
             GameObject spawnPos = gameManager.GetSpawnPosition();
             player.SetPosition(spawnPos.transform.position.x, spawnPos.transform.position.y, spawnPos.transform.position.z);
             player.SetRotation(spawnPos.transform.rotation.x, spawnPos.transform.rotation.y, spawnPos.transform.rotation.z);
+            playerView.StopClimbLadder();
             StartCoroutine(playerView.MoveToSpawnPosition());
         }
 
@@ -232,7 +251,18 @@ public class PlayerController : MonoBehaviourPun
         {
             if (trigger.tag == "StartLadder")
                 player.climbingLadder = true;
+            if (trigger.tag == "StartZipLine")
+            {
+                zipLine.SetActive(true);
+            }
             triggerName = trigger.name;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "StartZipLine")
+        {
+            zipLine.SetActive(false);
         }
     }
 

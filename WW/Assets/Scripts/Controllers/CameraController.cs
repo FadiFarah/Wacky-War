@@ -48,7 +48,6 @@ public class CameraController : MonoBehaviourPun
                     cameraModel.rotX = Mathf.Clamp(cameraModel.rotX, cameraModel.pitchMin, cameraModel.pitchMax);
                     cameraModel.SetRotation(cameraModel.rotX, cameraModel.rotY, cameraModel.rotZ);
                 }
-
                 cameraModel.SetPosition(cameraTransform.position.x, cameraTransform.position.y, cameraTransform.position.z);
                 cameraView.Rotate();
                 cameraView.Move();
